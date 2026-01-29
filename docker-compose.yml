@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api/src:/app/src
+      - ./model:/app/model
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MODEL_PATH=/app/model
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - model
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./ui/src:/app/src
+      - ./ui/public:/app/public
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    command: npm run dev -- --host
+
+  model:
+    build:
+      context: ./model
+      dockerfile: Dockerfile
+    volumes:
+      - ./model:/app
+    command: echo "Model service placeholder"
+
+networks:
+  default:
+    name: recycling-buddy-network
