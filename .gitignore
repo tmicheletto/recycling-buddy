@@ -67,6 +67,9 @@ build/
 # Docker
 *.log
 
+# LocalStack
+localstack-data/
+
 # OS
 .DS_Store
 Thumbs.db

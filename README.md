@@ -42,11 +42,32 @@ make dev
 ### Development Commands
 
 ```bash
-make setup      # Install dependencies for all components
-make dev        # Run all services with hot reload
-make test       # Run tests for all components
-make clean      # Clean build artifacts
+make setup           # Install dependencies for all components
+make run             # Run all services (LocalStack + API + UI)
+make dev             # Run all services with rebuild
+make init-localstack # Initialize LocalStack S3 bucket
+make stop            # Stop all running services
+make logs            # Show logs from running services
+make test            # Run tests for all components
+make clean           # Clean build artifacts
 ```
+
+### Quick Start
+
+Run the entire application with one command:
+
+```bash
+# Start all services
+make run
+
+# Services will be available at:
+# - http://localhost:8000 (API)
+# - http://localhost:8000/docs (API documentation)
+# - http://localhost:5173 (UI)
+# - http://localhost:4566 (LocalStack)
+```
+
+See [QUICKSTART_UPLOAD.md](./QUICKSTART_UPLOAD.md) for more details.
 
 ## Component Documentation
 
