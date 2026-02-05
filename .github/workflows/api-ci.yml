@@ -1,22 +1,24 @@
 name: API CI/CD
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'api/**'
-      - '.github/workflows/api-ci.yml'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'api/**'
-      - '.github/workflows/api-ci.yml'
-  workflow_run:
-    workflows: ["Infra Deploy"]
-    types: [completed]
-    branches: [main]
+  workflow_dispatch:  # Manual trigger only
+  # Automatic triggers disabled temporarily
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'api/**'
+  #     - '.github/workflows/api-ci.yml'
+  # pull_request:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'api/**'
+  #     - '.github/workflows/api-ci.yml'
+  # workflow_run:
+  #   workflows: ["Infra Deploy"]
+  #   types: [completed]
+  #   branches: [main]
 
 jobs:
   test:
