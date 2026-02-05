@@ -1,4 +1,4 @@
-name: API CI
+name: API CI/CD
 
 on:
   push:
@@ -13,6 +13,10 @@ on:
     paths:
       - 'api/**'
       - '.github/workflows/api-ci.yml'
+  workflow_run:
+    workflows: ["Infra Deploy"]
+    types: [completed]
+    branches: [main]
 
 jobs:
   test:
@@ -49,3 +53,54 @@ jobs:
       - name: Run tests
         working-directory: api
         run: uv run pytest
+
+  deploy:
+    name: Deploy to AWS App Runner
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.0.0
+          terraform_wrapper: false
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-2
+
+      - name: Get ECR repository URL from Terraform
+        id: terraform
+        working-directory: infra
+        run: |
+          terraform init
+          ECR_URL=$(terraform output -raw ecr_repository_url)
+          echo "ecr_url=$ECR_URL" >> $GITHUB_OUTPUT
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker image
+        working-directory: api
+        env:
+          ECR_REPOSITORY: ${{ steps.terraform.outputs.ecr_url }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REPOSITORY:latest
+          docker push $ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REPOSITORY:latest
+
+      - name: Deployment complete
+        run: |
+          echo "Docker image pushed to ECR"
+          echo "App Runner will automatically deploy the new image"
