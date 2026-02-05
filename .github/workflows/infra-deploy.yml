@@ -6,11 +6,13 @@ on:
       - main
     paths:
       - 'infra/**'
+      - '.github/workflows/infra-deploy.yml'
   pull_request:
     branches:
       - main
     paths:
       - 'infra/**'
+      - '.github/workflows/infra-deploy.yml'
 
 jobs:
   terraform:
