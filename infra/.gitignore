@@ -7,6 +7,9 @@
 *.tfvars
 *.tfvars.json
 
+# Exception: terraform.tfvars is safe to commit (contains only ARNs, needed for CI)
+!terraform.tfvars
+
 # Terraform directory
 .terraform/
 .terraform.lock.hcl
