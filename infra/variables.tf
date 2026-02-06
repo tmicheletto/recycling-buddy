@@ -27,3 +27,13 @@ variable "api_memory" {
   type        = string
   default     = "0.5 GB"
 }
+
+variable "apprunner_access_role_arn" {
+  description = "ARN of IAM role for App Runner to access ECR (managed externally)"
+  type        = string
+}
+
+variable "apprunner_instance_role_arn" {
+  description = "ARN of IAM role for App Runner instance runtime (managed externally)"
+  type        = string
+}
