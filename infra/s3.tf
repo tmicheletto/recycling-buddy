@@ -1,9 +1,9 @@
 # Training data bucket (private)
 resource "aws_s3_bucket" "training" {
-  bucket = "${local.name_prefix}-training"
+  bucket = "${local.name_prefix}-data"
 
   tags = {
-    Name        = "${local.name_prefix}-training"
+    Name        = "${local.name_prefix}-data"
     Environment = var.environment
     Purpose     = "ML training data storage"
   }
