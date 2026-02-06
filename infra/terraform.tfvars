@@ -15,8 +15,8 @@ api_memory = "0.5 GB"
 
 # Role for App Runner to access ECR during build/deployment
 # Required permissions: AWSAppRunnerServicePolicyForECRAccess
-apprunner_access_role_arn = "arn:aws:iam::646385694251:role/recycling-buddy-api-role"
+apprunner_access_role_arn = "arn:aws:iam::646385694251:role/recycling-buddy-deployment-role"
 
 # Role for App Runner instance at runtime
 # Required permissions: S3 access to training bucket
-apprunner_instance_role_arn = "arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME"
+apprunner_instance_role_arn = "arn:aws:iam::646385694251:role/recycling-buddy-api-role"
