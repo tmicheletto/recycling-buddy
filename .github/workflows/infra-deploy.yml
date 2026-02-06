@@ -18,6 +18,9 @@ jobs:
   terraform:
     name: Terraform
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # Required for OIDC authentication
+      contents: read    # Required for checkout
     defaults:
       run:
         working-directory: infra
