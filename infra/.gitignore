@@ -3,11 +3,6 @@
 *.tfstate.*
 *.tfstate.backup
 
-# Terraform variable files
-# Note: tfvars are committed for CI/CD (contain only non-secret config)
-# *.tfvars
-# *.tfvars.json
-
 # Terraform directory
 .terraform/
 .terraform.lock.hcl
