@@ -33,7 +33,6 @@ resource "aws_apprunner_service" "api" {
   }
 
   tags = {
-    Name        = "${local.name_prefix}-api"
-    Environment = var.environment
+    Name = "${local.name_prefix}-api"
   }
 }

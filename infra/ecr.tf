@@ -7,8 +7,7 @@ resource "aws_ecr_repository" "api" {
   }
 
   tags = {
-    Name        = "${local.name_prefix}-api"
-    Environment = var.environment
+    Name = "${local.name_prefix}-api"
   }
 }
 

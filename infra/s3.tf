@@ -4,7 +4,6 @@ resource "aws_s3_bucket" "training" {
 
   tags = {
     Name        = "${local.name_prefix}-data"
-    Environment = var.environment
     Purpose     = "ML training data storage"
   }
 }
@@ -32,7 +31,6 @@ resource "aws_s3_bucket" "ui" {
 
   tags = {
     Name        = "${local.name_prefix}-ui"
-    Environment = var.environment
     Purpose     = "Static website hosting"
   }
 }
