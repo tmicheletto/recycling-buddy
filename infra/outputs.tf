@@ -1,6 +1,6 @@
 output "api_url" {
   description = "App Runner API URL"
-  value       = "https://${aws_apprunner_service.api.service_url}"
+  value       = var.deploy_apprunner ? "https://${aws_apprunner_service.api[0].service_url}" : "not deployed"
 }
 
 output "ui_url" {
