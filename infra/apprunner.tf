@@ -32,7 +32,7 @@ resource "aws_apprunner_service" "api" {
 
   health_check_configuration {
     protocol = "HTTP"
-    path     = "/health"
+    path     = "/"
   }
 
   tags = {
