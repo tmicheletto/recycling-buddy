@@ -22,3 +22,12 @@ dev = [
     "pytest-asyncio>=1.3.0",
     "ruff>=0.14.14",
 ]
+
+[tool.pyright]
+# Override automatic src-layout detection
+# Set import root to api directory (not api/src)
+# This allows imports like 'from src.main import app' to work
+include = ["src", "tests"]
+stubPath = ""
+venvPath = "."
+venv = ".venv"
