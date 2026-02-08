@@ -18,5 +18,5 @@ api_memory = "0.5 GB"
 apprunner_access_role_arn = "arn:aws:iam::646385694251:role/recycling-buddy-deployment-role"
 
 # Role for App Runner instance at runtime
-# Required permissions: S3 access to training bucket
+# Required permissions: S3 access to data bucket
 apprunner_instance_role_arn = "arn:aws:iam::646385694251:role/recycling-buddy-api-role"

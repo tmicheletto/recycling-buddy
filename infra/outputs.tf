@@ -18,9 +18,9 @@ output "ecr_repository_url" {
   value       = aws_ecr_repository.api.repository_url
 }
 
-output "training_bucket" {
-  description = "Training data S3 bucket name"
-  value       = aws_s3_bucket.training.id
+output "data_bucket" {
+  description = "Data S3 bucket name"
+  value       = aws_s3_bucket.data.id
 }
 
 output "aws_region" {

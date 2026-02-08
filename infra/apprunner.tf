@@ -10,7 +10,7 @@ resource "aws_apprunner_service" "api" {
       image_configuration {
         port = "8000"
         runtime_environment_variables = {
-          S3_BUCKET  = aws_s3_bucket.training.id
+          S3_BUCKET  = aws_s3_bucket.data.id
           AWS_REGION = var.aws_region
         }
       }

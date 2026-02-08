@@ -1,23 +1,23 @@
-# Training data bucket (private)
-resource "aws_s3_bucket" "training" {
+# Data bucket (private)
+resource "aws_s3_bucket" "data" {
   bucket = "${local.name_prefix}-data"
 
   tags = {
     Name    = "${local.name_prefix}-data"
-    Purpose = "ML training data storage"
+    Purpose = "ML data storage"
   }
 }
 
-resource "aws_s3_bucket_versioning" "training" {
-  bucket = aws_s3_bucket.training.id
+resource "aws_s3_bucket_versioning" "data" {
+  bucket = aws_s3_bucket.data.id
 
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "training" {
-  bucket = aws_s3_bucket.training.id
+resource "aws_s3_bucket_public_access_block" "data" {
+  bucket = aws_s3_bucket.data.id
 
   block_public_acls       = true
   block_public_policy     = true
