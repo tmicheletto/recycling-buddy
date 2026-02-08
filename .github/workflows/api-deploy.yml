@@ -70,13 +70,13 @@ jobs:
           echo "Deploying image $IMAGE_URI to App Runner service $SERVICE_ARN"
 
           # Update App Runner service with new image (private ECR)
-          # Include authentication configuration for private ECR access
+          # Note: ImageRepositoryType cannot be changed after service creation
+          # so we only update the ImageIdentifier
           OPERATION_ID=$(aws apprunner update-service \
             --service-arn "$SERVICE_ARN" \
             --source-configuration "{
               \"ImageRepository\": {
                 \"ImageIdentifier\": \"$IMAGE_URI\",
-                \"ImageRepositoryType\": \"ECR\",
                 \"ImageConfiguration\": {
                   \"Port\": \"8000\"
                 }

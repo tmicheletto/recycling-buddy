@@ -6,10 +6,10 @@ resource "aws_apprunner_service" "api" {
 
   source_configuration {
     image_repository {
-      # Use public placeholder image for initial creation
-      # CI/CD pipeline will update this with actual application image
-      image_identifier      = "public.ecr.aws/aws-containers/hello-app-runner:latest"
-      image_repository_type = "ECR_PUBLIC"
+      # Point to our private ECR repository with :latest tag
+      # CI/CD pipeline will update this with specific commit SHAs
+      image_identifier      = "${aws_ecr_repository.api.repository_url}:latest"
+      image_repository_type = "ECR"
       image_configuration {
         port = "8000"
         runtime_environment_variables = {
@@ -18,8 +18,9 @@ resource "aws_apprunner_service" "api" {
         }
       }
     }
-    # Note: No authentication_configuration for public images
-    # CI/CD will add authentication when switching to private ECR
+    authentication_configuration {
+      access_role_arn = var.apprunner_access_role_arn
+    }
     # Disable auto-deployments - CI/CD pipeline manages deployments explicitly
     auto_deployments_enabled = false
   }
