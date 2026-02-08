@@ -3,8 +3,8 @@ resource "aws_s3_bucket" "training" {
   bucket = "${local.name_prefix}-data"
 
   tags = {
-    Name        = "${local.name_prefix}-data"
-    Purpose     = "ML training data storage"
+    Name    = "${local.name_prefix}-data"
+    Purpose = "ML training data storage"
   }
 }
 
