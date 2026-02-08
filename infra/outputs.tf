@@ -18,6 +18,16 @@ output "ecr_repository_url" {
   value       = aws_ecr_repository.api.repository_url
 }
 
+output "apprunner_service_arn" {
+  description = "App Runner service ARN for deployment updates"
+  value       = aws_apprunner_service.api.arn
+}
+
+output "apprunner_service_name" {
+  description = "App Runner service name for deployment"
+  value       = aws_apprunner_service.api.service_name
+}
+
 output "data_bucket" {
   description = "Data S3 bucket name"
   value       = aws_s3_bucket.data.id
