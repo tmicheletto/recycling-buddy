@@ -12,7 +12,6 @@ terraform {
     key          = "recycling-buddy/terraform.tfstate"
     region       = "ap-southeast-2"
     encrypt      = true
-    use_lockfile = false
   }
 }
 
