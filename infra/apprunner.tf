@@ -18,9 +18,8 @@ resource "aws_apprunner_service" "api" {
         }
       }
     }
-    authentication_configuration {
-      access_role_arn = var.apprunner_access_role_arn
-    }
+    # Note: No authentication_configuration for public images
+    # CI/CD will add authentication when switching to private ECR
     # Disable auto-deployments - CI/CD pipeline manages deployments explicitly
     auto_deployments_enabled = false
   }

@@ -28,6 +28,11 @@ output "apprunner_service_name" {
   value       = aws_apprunner_service.api.service_name
 }
 
+output "apprunner_access_role_arn" {
+  description = "IAM role ARN for App Runner to access ECR"
+  value       = var.apprunner_access_role_arn
+}
+
 output "data_bucket" {
   description = "Data S3 bucket name"
   value       = aws_s3_bucket.data.id

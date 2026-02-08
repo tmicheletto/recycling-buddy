@@ -38,8 +38,10 @@ jobs:
           terraform init
           ECR_URL=$(terraform output -raw ecr_repository_url)
           SERVICE_ARN=$(terraform output -raw apprunner_service_arn)
+          ACCESS_ROLE_ARN=$(terraform output -raw apprunner_access_role_arn)
           echo "ecr_url=$ECR_URL" >> $GITHUB_OUTPUT
           echo "service_arn=$SERVICE_ARN" >> $GITHUB_OUTPUT
+          echo "access_role_arn=$ACCESS_ROLE_ARN" >> $GITHUB_OUTPUT
 
       - name: Determine image tag
         id: image
@@ -61,13 +63,27 @@ jobs:
         env:
           SERVICE_ARN: ${{ steps.terraform.outputs.service_arn }}
           IMAGE_URI: ${{ steps.image.outputs.image_uri }}
+          ACCESS_ROLE_ARN: ${{ steps.terraform.outputs.access_role_arn }}
         run: |
           echo "Deploying image $IMAGE_URI to App Runner service $SERVICE_ARN"
 
-          # Update App Runner service with new image
+          # Update App Runner service with new image (private ECR)
+          # Include authentication configuration for private ECR access
           OPERATION_ID=$(aws apprunner update-service \
             --service-arn "$SERVICE_ARN" \
-            --source-configuration "ImageRepository={ImageIdentifier=$IMAGE_URI,ImageRepositoryType=ECR,ImageConfiguration={Port=8000}}" \
+            --source-configuration "{
+              \"ImageRepository\": {
+                \"ImageIdentifier\": \"$IMAGE_URI\",
+                \"ImageRepositoryType\": \"ECR\",
+                \"ImageConfiguration\": {
+                  \"Port\": \"8000\"
+                }
+              },
+              \"AuthenticationConfiguration\": {
+                \"AccessRoleArn\": \"$ACCESS_ROLE_ARN\"
+              },
+              \"AutoDeploymentsEnabled\": false
+            }" \
             --query 'OperationId' \
             --output text)
 
