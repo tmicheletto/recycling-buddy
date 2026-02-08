@@ -37,3 +37,9 @@ variable "apprunner_instance_role_arn" {
   description = "ARN of IAM role for App Runner instance runtime (managed externally)"
   type        = string
 }
+
+variable "deploy_apprunner" {
+  description = "Set to true once an image has been pushed to ECR. False skips App Runner creation."
+  type        = bool
+  default     = false
+}
