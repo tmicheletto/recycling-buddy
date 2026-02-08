@@ -17,23 +17,19 @@ variable "aws_region" {
 }
 
 variable "api_cpu" {
-  description = "App Runner CPU allocation"
-  type        = string
-  default     = "0.25 vCPU"
+  description = "Fargate CPU units (256 = 0.25 vCPU)"
+  type        = number
+  default     = 256
 }
 
 variable "api_memory" {
-  description = "App Runner memory allocation"
-  type        = string
-  default     = "0.5 GB"
+  description = "Fargate memory in MiB"
+  type        = number
+  default     = 512
 }
 
-variable "apprunner_access_role_arn" {
-  description = "ARN of IAM role for App Runner to access ECR (managed externally)"
-  type        = string
-}
-
-variable "apprunner_instance_role_arn" {
-  description = "ARN of IAM role for App Runner instance runtime (managed externally)"
-  type        = string
+variable "api_desired_count" {
+  description = "Desired number of API tasks"
+  type        = number
+  default     = 1
 }

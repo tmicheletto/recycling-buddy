@@ -8,13 +8,14 @@ terraform {
   }
 
   backend "s3" {
-    bucket       = "terraform-state-646385694251"
-    key          = "recycling-buddy/terraform.tfstate"
-    region       = "ap-southeast-2"
-    encrypt      = true
+    bucket  = "terraform-state-646385694251"
+    key     = "recycling-buddy/terraform.tfstate"
+    region  = "ap-southeast-2"
+    encrypt = true
   }
 }
 
 locals {
   name_prefix = var.project_name
+  azs         = ["${var.aws_region}a", "${var.aws_region}b"]
 }

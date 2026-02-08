@@ -1,6 +1,6 @@
 output "api_url" {
-  description = "App Runner API URL"
-  value       = "https://${aws_apprunner_service.api.service_url}"
+  description = "ALB API URL"
+  value       = "http://${aws_lb.api.dns_name}"
 }
 
 output "ui_url" {
@@ -18,19 +18,14 @@ output "ecr_repository_url" {
   value       = aws_ecr_repository.api.repository_url
 }
 
-output "apprunner_service_arn" {
-  description = "App Runner service ARN for deployment updates"
-  value       = aws_apprunner_service.api.arn
+output "ecs_cluster_name" {
+  description = "ECS cluster name for deployment"
+  value       = aws_ecs_cluster.main.name
 }
 
-output "apprunner_service_name" {
-  description = "App Runner service name for deployment"
-  value       = aws_apprunner_service.api.service_name
-}
-
-output "apprunner_access_role_arn" {
-  description = "IAM role ARN for App Runner to access ECR"
-  value       = var.apprunner_access_role_arn
+output "ecs_service_name" {
+  description = "ECS service name for deployment"
+  value       = aws_ecs_service.api.name
 }
 
 output "data_bucket" {

@@ -30,8 +30,8 @@ resource "aws_s3_bucket" "ui" {
   bucket = "${local.name_prefix}-ui"
 
   tags = {
-    Name        = "${local.name_prefix}-ui"
-    Purpose     = "Static website hosting"
+    Name    = "${local.name_prefix}-ui"
+    Purpose = "Static website hosting"
   }
 }
 

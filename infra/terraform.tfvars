@@ -6,17 +6,7 @@ project_name = "recycling-buddy"
 environment  = "dev"
 aws_region   = "ap-southeast-2"
 
-# App Runner configuration
-api_cpu    = "0.25 vCPU"
-api_memory = "0.5 GB"
-
-# IAM Role ARNs (managed externally)
-# These roles must be created outside of this Terraform configuration
-
-# Role for App Runner to access ECR during build/deployment
-# Required permissions: AWSAppRunnerServicePolicyForECRAccess
-apprunner_access_role_arn = "arn:aws:iam::646385694251:role/recycling-buddy-deployment-role"
-
-# Role for App Runner instance at runtime
-# Required permissions: S3 access to data bucket
-apprunner_instance_role_arn = "arn:aws:iam::646385694251:role/recycling-buddy-api-role"
+# ECS Fargate configuration
+api_cpu           = 256
+api_memory        = 512
+api_desired_count = 1

@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to App Runner
+    name: Deploy to ECS
     runs-on: ubuntu-latest
     # Only run if the CI workflow succeeded
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
@@ -39,11 +39,13 @@ jobs:
         run: |
           terraform init
           ECR_URL=$(terraform output -raw ecr_repository_url)
-          SERVICE_ARN=$(terraform output -raw apprunner_service_arn)
-          ACCESS_ROLE_ARN=$(terraform output -raw apprunner_access_role_arn)
+          CLUSTER_NAME=$(terraform output -raw ecs_cluster_name)
+          SERVICE_NAME=$(terraform output -raw ecs_service_name)
+          API_URL=$(terraform output -raw api_url)
           echo "ecr_url=$ECR_URL" >> $GITHUB_OUTPUT
-          echo "service_arn=$SERVICE_ARN" >> $GITHUB_OUTPUT
-          echo "access_role_arn=$ACCESS_ROLE_ARN" >> $GITHUB_OUTPUT
+          echo "cluster_name=$CLUSTER_NAME" >> $GITHUB_OUTPUT
+          echo "service_name=$SERVICE_NAME" >> $GITHUB_OUTPUT
+          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
 
       - name: Determine image tag
         id: image
@@ -61,81 +63,41 @@ jobs:
           echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
           echo "Deploying image: $IMAGE_URI"
 
-      - name: Deploy to App Runner
+      - name: Deploy to ECS
         env:
-          SERVICE_ARN: ${{ steps.terraform.outputs.service_arn }}
-          IMAGE_URI: ${{ steps.image.outputs.image_uri }}
-          ACCESS_ROLE_ARN: ${{ steps.terraform.outputs.access_role_arn }}
+          CLUSTER_NAME: ${{ steps.terraform.outputs.cluster_name }}
+          SERVICE_NAME: ${{ steps.terraform.outputs.service_name }}
         run: |
-          echo "Deploying image $IMAGE_URI to App Runner service $SERVICE_ARN"
+          echo "Deploying to ECS cluster $CLUSTER_NAME, service $SERVICE_NAME"
 
-          # Update App Runner service with new image (private ECR)
-          # Note: ImageRepositoryType cannot be changed after service creation
-          # so we only update the ImageIdentifier
-          OPERATION_ID=$(aws apprunner update-service \
-            --service-arn "$SERVICE_ARN" \
-            --source-configuration "{
-              \"ImageRepository\": {
-                \"ImageIdentifier\": \"$IMAGE_URI\",
-                \"ImageConfiguration\": {
-                  \"Port\": \"8000\"
-                }
-              },
-              \"AuthenticationConfiguration\": {
-                \"AccessRoleArn\": \"$ACCESS_ROLE_ARN\"
-              },
-              \"AutoDeploymentsEnabled\": false
-            }" \
-            --query 'OperationId' \
-            --output text)
+          # Force new deployment to pull latest :latest image
+          aws ecs update-service \
+            --cluster "$CLUSTER_NAME" \
+            --service "$SERVICE_NAME" \
+            --force-new-deployment \
+            --no-cli-pager
 
-          echo "Deployment initiated with operation ID: $OPERATION_ID"
-          echo "operation_id=$OPERATION_ID" >> $GITHUB_OUTPUT
+          echo "✅ Deployment initiated"
 
       - name: Wait for deployment
         env:
-          SERVICE_ARN: ${{ steps.terraform.outputs.service_arn }}
+          CLUSTER_NAME: ${{ steps.terraform.outputs.cluster_name }}
+          SERVICE_NAME: ${{ steps.terraform.outputs.service_name }}
         run: |
-          echo "Waiting for App Runner deployment to complete..."
+          echo "⏳ Waiting for ECS deployment to stabilize..."
 
-          # Poll service status until deployment is complete
-          MAX_ATTEMPTS=60  # 10 minutes max (60 * 10 seconds)
-          ATTEMPT=0
+          # Wait for service to reach steady state (max 10 minutes)
+          aws ecs wait services-stable \
+            --cluster "$CLUSTER_NAME" \
+            --services "$SERVICE_NAME"
 
-          while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
-            STATUS=$(aws apprunner describe-service \
-              --service-arn "$SERVICE_ARN" \
-              --query 'Service.Status' \
-              --output text)
+          echo "✅ Deployment successful! Service is stable."
 
-            echo "Current status: $STATUS (attempt $((ATTEMPT + 1))/$MAX_ATTEMPTS)"
-
-            if [ "$STATUS" = "RUNNING" ]; then
-              echo "✅ Deployment successful! Service is running."
-              exit 0
-            elif [ "$STATUS" = "OPERATION_IN_PROGRESS" ] || [ "$STATUS" = "CREATING" ]; then
-              echo "⏳ Deployment in progress..."
-              sleep 10
-              ATTEMPT=$((ATTEMPT + 1))
-            else
-              echo "❌ Unexpected status: $STATUS"
-              exit 1
-            fi
-          done
-
-          echo "❌ Deployment timed out after 10 minutes"
-          exit 1
-
-      - name: Get deployment URL
+      - name: Display deployment info
         if: success()
         env:
-          SERVICE_ARN: ${{ steps.terraform.outputs.service_arn }}
+          API_URL: ${{ steps.terraform.outputs.api_url }}
         run: |
-          SERVICE_URL=$(aws apprunner describe-service \
-            --service-arn "$SERVICE_ARN" \
-            --query 'Service.ServiceUrl' \
-            --output text)
-
           echo "🚀 API deployed successfully!"
-          echo "📍 Service URL: https://$SERVICE_URL"
-          echo "🏥 Health check: https://$SERVICE_URL/health"
+          echo "📍 Service URL: $API_URL"
+          echo "🏥 Health check: $API_URL/health"
