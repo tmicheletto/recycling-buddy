@@ -30,7 +30,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::646385694251:role/recycling-buddy-deployment-role
+          role-to-assume: arn:aws:iam::646385694251:role/recycling-buddy-deployment
           aws-region: ap-southeast-2
 
       - name: Get infrastructure outputs from Terraform
