@@ -45,6 +45,10 @@ resource "aws_ecs_task_definition" "api" {
 
       environment = [
         {
+          name  = "ENVIRONMENT"
+          value = "TEST"
+        },
+        {
           name  = "S3_BUCKET"
           value = aws_s3_bucket.data.id
         },
