@@ -3,9 +3,15 @@ name: API Deploy
 on:
   workflow_dispatch:  # Manual trigger
   workflow_run:
-    workflows: ["API CI/CD"]
+    workflows: ["API CI/CD", "Infra Deploy"]
     types: [completed]
     branches: [main]
+
+env:
+  AWS_REGION: ap-southeast-2
+  ECR_REPOSITORY: 646385694251.dkr.ecr.ap-southeast-2.amazonaws.com/recycling-buddy-api
+  ECS_CLUSTER: recycling-buddy
+  ECS_SERVICE: recycling-buddy-api
 
 jobs:
   deploy:
@@ -21,36 +27,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.0.0
-          terraform_wrapper: false
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::646385694251:role/recycling-buddy-deployment
-          aws-region: ap-southeast-2
-
-      - name: Get infrastructure outputs from Terraform
-        id: terraform
-        working-directory: infra
-        run: |
-          terraform init
-          ECR_URL=$(terraform output -raw ecr_repository_url)
-          CLUSTER_NAME=$(terraform output -raw ecs_cluster_name)
-          SERVICE_NAME=$(terraform output -raw ecs_service_name)
-          API_URL=$(terraform output -raw api_url)
-          echo "ecr_url=$ECR_URL" >> $GITHUB_OUTPUT
-          echo "cluster_name=$CLUSTER_NAME" >> $GITHUB_OUTPUT
-          echo "service_name=$SERVICE_NAME" >> $GITHUB_OUTPUT
-          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Determine image tag
         id: image
-        env:
-          ECR_URL: ${{ steps.terraform.outputs.ecr_url }}
         run: |
           # Use the SHA from the workflow_run event, or current SHA for manual triggers
           if [ "${{ github.event_name }}" = "workflow_run" ]; then
@@ -58,46 +42,38 @@ jobs:
           else
             IMAGE_TAG="${{ github.sha }}"
           fi
-          IMAGE_URI="$ECR_URL:$IMAGE_TAG"
+          IMAGE_URI="$ECR_REPOSITORY:$IMAGE_TAG"
           echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
           echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
           echo "Deploying image: $IMAGE_URI"
 
       - name: Deploy to ECS
-        env:
-          CLUSTER_NAME: ${{ steps.terraform.outputs.cluster_name }}
-          SERVICE_NAME: ${{ steps.terraform.outputs.service_name }}
         run: |
-          echo "Deploying to ECS cluster $CLUSTER_NAME, service $SERVICE_NAME"
+          echo "Deploying to ECS cluster $ECS_CLUSTER, service $ECS_SERVICE"
 
           # Force new deployment to pull latest :latest image
           aws ecs update-service \
-            --cluster "$CLUSTER_NAME" \
-            --service "$SERVICE_NAME" \
+            --cluster "$ECS_CLUSTER" \
+            --service "$ECS_SERVICE" \
             --force-new-deployment \
             --no-cli-pager
 
           echo "✅ Deployment initiated"
 
       - name: Wait for deployment
-        env:
-          CLUSTER_NAME: ${{ steps.terraform.outputs.cluster_name }}
-          SERVICE_NAME: ${{ steps.terraform.outputs.service_name }}
         run: |
           echo "⏳ Waiting for ECS deployment to stabilize..."
 
           # Wait for service to reach steady state (max 10 minutes)
           aws ecs wait services-stable \
-            --cluster "$CLUSTER_NAME" \
-            --services "$SERVICE_NAME"
+            --cluster "$ECS_CLUSTER" \
+            --services "$ECS_SERVICE"
 
           echo "✅ Deployment successful! Service is stable."
 
       - name: Display deployment info
         if: success()
-        env:
-          API_URL: ${{ steps.terraform.outputs.api_url }}
         run: |
           echo "🚀 API deployed successfully!"
-          echo "📍 Service URL: $API_URL"
-          echo "🏥 Health check: $API_URL/health"
+          echo "📍 Cluster: $ECS_CLUSTER"
+          echo "📍 Service: $ECS_SERVICE"
