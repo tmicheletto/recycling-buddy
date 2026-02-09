@@ -74,6 +74,8 @@ jobs:
       - name: Display deployment info
         if: success()
         run: |
+          API_URL=$(aws elbv2 describe-load-balancers --names recycling-buddy-alb --query 'LoadBalancers[0].DNSName' --output text)
           echo "🚀 API deployed successfully!"
           echo "📍 Cluster: $ECS_CLUSTER"
           echo "📍 Service: $ECS_SERVICE"
+          echo "🏥 Health check: http://$API_URL/health"

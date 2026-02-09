@@ -65,25 +65,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.0.0
-          terraform_wrapper: false
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::646385694251:role/recycling-buddy-deployment
           aws-region: ap-southeast-2
-
-      - name: Get ECR repository URL from Terraform
-        id: terraform
-        working-directory: infra
-        run: |
-          terraform init
-          ECR_URL=$(terraform output -raw ecr_repository_url)
-          echo "ecr_url=$ECR_URL" >> $GITHUB_OUTPUT
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -93,7 +79,7 @@ jobs:
         id: build-image
         working-directory: api
         env:
-          ECR_REPOSITORY: ${{ steps.terraform.outputs.ecr_url }}
+          ECR_REPOSITORY: 646385694251.dkr.ecr.ap-southeast-2.amazonaws.com/recycling-buddy-api
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
