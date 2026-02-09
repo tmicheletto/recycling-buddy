@@ -33,3 +33,13 @@ variable "api_desired_count" {
   type        = number
   default     = 1
 }
+
+variable "ecs_execution_role_arn" {
+  description = "ARN of IAM role for ECS task execution (ECR pull + CloudWatch Logs, managed externally)"
+  type        = string
+}
+
+variable "ecs_task_role_arn" {
+  description = "ARN of IAM role for ECS task runtime (S3 access, managed externally)"
+  type        = string
+}

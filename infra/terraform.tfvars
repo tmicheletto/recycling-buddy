@@ -10,3 +10,7 @@ aws_region   = "ap-southeast-2"
 api_cpu           = 256
 api_memory        = 512
 api_desired_count = 1
+
+# IAM Role ARNs (managed externally)
+ecs_execution_role_arn = "arn:aws:iam::646385694251:role/recycling-buddy-ecs"
+ecs_task_role_arn      = "arn:aws:iam::646385694251:role/recycling-buddy-api"
