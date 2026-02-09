@@ -51,6 +51,9 @@ yarn-error.log*
 dist/
 build/
 
+# Claude Code
+.claude/settings.local.json
+
 # IDE
 .vscode/
 .idea/

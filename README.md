@@ -69,6 +69,11 @@ make run
 
 See [QUICKSTART_UPLOAD.md](./QUICKSTART_UPLOAD.md) for more details.
 
+## Live Environment
+
+- **API**: http://recycling-buddy-alb-1609036275.ap-southeast-2.elb.amazonaws.com
+- **Health check**: http://recycling-buddy-alb-1609036275.ap-southeast-2.elb.amazonaws.com/health
+
 ## Component Documentation
 
 - [Model Documentation](./model/README.md)
