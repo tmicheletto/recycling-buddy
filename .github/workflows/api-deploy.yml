@@ -12,6 +12,8 @@ env:
   ECR_REPOSITORY: 646385694251.dkr.ecr.ap-southeast-2.amazonaws.com/recycling-buddy-api
   ECS_CLUSTER: recycling-buddy
   ECS_SERVICE: recycling-buddy-api
+  ECS_TASK_DEFINITION: api/task-definition.json
+  CONTAINER_NAME: api
 
 jobs:
   deploy:
@@ -33,6 +35,10 @@ jobs:
           role-to-assume: arn:aws:iam::646385694251:role/recycling-buddy-deployment
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
       - name: Determine image tag
         id: image
         run: |
@@ -43,39 +49,21 @@ jobs:
             IMAGE_TAG="${{ github.sha }}"
           fi
           IMAGE_URI="$ECR_REPOSITORY:$IMAGE_TAG"
-          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
           echo "image_uri=$IMAGE_URI" >> $GITHUB_OUTPUT
           echo "Deploying image: $IMAGE_URI"
 
-      - name: Deploy to ECS
-        run: |
-          echo "Deploying to ECS cluster $ECS_CLUSTER, service $ECS_SERVICE"
+      - name: Render Amazon ECS task definition
+        id: render-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.image.outputs.image_uri }}
 
-          # Force new deployment to pull latest :latest image
-          aws ecs update-service \
-            --cluster "$ECS_CLUSTER" \
-            --service "$ECS_SERVICE" \
-            --force-new-deployment \
-            --no-cli-pager
-
-          echo "✅ Deployment initiated"
-
-      - name: Wait for deployment
-        run: |
-          echo "⏳ Waiting for ECS deployment to stabilize..."
-
-          # Wait for service to reach steady state (max 10 minutes)
-          aws ecs wait services-stable \
-            --cluster "$ECS_CLUSTER" \
-            --services "$ECS_SERVICE"
-
-          echo "✅ Deployment successful! Service is stable."
-
-      - name: Display deployment info
-        if: success()
-        run: |
-          API_URL=$(aws elbv2 describe-load-balancers --names recycling-buddy-alb --query 'LoadBalancers[0].DNSName' --output text)
-          echo "🚀 API deployed successfully!"
-          echo "📍 Cluster: $ECS_CLUSTER"
-          echo "📍 Service: $ECS_SERVICE"
-          echo "🏥 Health check: http://$API_URL/health"
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true

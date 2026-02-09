@@ -1,0 +1,44 @@
+{
+  "family": "recycling-buddy-api",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::646385694251:role/recycling-buddy-ecs",
+  "taskRoleArn": "arn:aws:iam::646385694251:role/recycling-buddy-api",
+  "containerDefinitions": [
+    {
+      "name": "api",
+      "image": "PLACEHOLDER",
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "ENVIRONMENT",
+          "value": "TEST"
+        },
+        {
+          "name": "S3_BUCKET",
+          "value": "recycling-buddy-data"
+        },
+        {
+          "name": "AWS_REGION",
+          "value": "ap-southeast-2"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/recycling-buddy-api",
+          "awslogs-region": "ap-southeast-2",
+          "awslogs-stream-prefix": "api"
+        }
+      },
+      "essential": true
+    }
+  ]
+}
