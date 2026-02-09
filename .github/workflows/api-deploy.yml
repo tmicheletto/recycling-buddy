@@ -3,7 +3,7 @@ name: API Deploy
 on:
   workflow_dispatch:  # Manual trigger
   workflow_run:
-    workflows: ["API CI/CD", "Infra Deploy"]
+    workflows: ["API CI/CD"]
     types: [completed]
     branches: [main]
 
