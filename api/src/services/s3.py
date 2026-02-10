@@ -1,9 +1,12 @@
 """S3 service for uploading training images."""
 
+import logging
 import uuid
 from datetime import datetime, timezone
 
 import boto3
+
+logger = logging.getLogger(__name__)
 
 
 class S3Service:
@@ -53,11 +56,18 @@ class S3Service:
         file_ext = self._detect_extension(data)
         key = f"{label}/{uuid.uuid4()}_{timestamp}.{file_ext}"
 
-        self.client.put_object(
+        logger.info("Uploading to s3://%s/%s", self.bucket, key)
+        response = self.client.put_object(
             Bucket=self.bucket,
             Key=key,
             Body=data,
             ContentType=f"image/{file_ext}",
+        )
+        metadata = response.get("ResponseMetadata", {})
+        logger.info(
+            "S3 put_object completed: status=%s request_id=%s",
+            metadata.get("HTTPStatusCode"),
+            metadata.get("RequestId"),
         )
         return key
 
