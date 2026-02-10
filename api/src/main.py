@@ -4,13 +4,13 @@ FastAPI application for Recycling Buddy
 
 import base64
 import logging
-from enum import Enum
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from src.config import settings
+from src.labels import ALL_LABELS, LABELS_BY_CATEGORY
 from src.services.s3 import S3Service
 
 # Configure logging
@@ -43,14 +43,6 @@ s3_service = S3Service(
 )
 
 
-# Enums
-class RecyclingLabel(str, Enum):
-    """Valid recycling labels."""
-
-    recyclable = "recyclable"
-    not_recyclable = "not_recyclable"
-
-
 # Response models
 class HealthResponse(BaseModel):
     """Health check response."""
@@ -67,11 +59,39 @@ class PredictionResponse(BaseModel):
     categories: list[dict[str, float]]
 
 
+class LabelItem(BaseModel):
+    """A single label entry."""
+
+    value: str
+    display_name: str
+
+
+class LabelCategory(BaseModel):
+    """A category containing label items."""
+
+    category: str
+    items: list[LabelItem]
+
+
+class LabelsResponse(BaseModel):
+    """Response for GET /labels."""
+
+    categories: list[LabelCategory]
+    total_count: int
+
+
 class UploadRequest(BaseModel):
     """Upload training image request."""
 
     image_base64: str  # Base64 encoded image
-    label: RecyclingLabel
+    label: str
+
+    @field_validator("label")
+    @classmethod
+    def label_must_be_valid(cls, v: str) -> str:
+        if v not in ALL_LABELS:
+            raise ValueError(f"Invalid label '{v}'. Use GET /labels for valid options.")
+        return v
 
 
 class UploadResponse(BaseModel):
@@ -130,6 +150,29 @@ async def predict(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+def _display_name(label: str) -> str:
+    """Convert a label like 'aluminum-can' to 'Aluminum Can'."""
+    return label.replace("-", " ").title()
+
+
+@app.get("/labels", response_model=LabelsResponse)
+async def get_labels():
+    """Return all valid labels grouped by category."""
+    categories = [
+        LabelCategory(
+            category=cat,
+            items=[
+                LabelItem(value=lbl, display_name=_display_name(lbl)) for lbl in items
+            ],
+        )
+        for cat, items in LABELS_BY_CATEGORY.items()
+    ]
+    return LabelsResponse(
+        categories=categories,
+        total_count=len(ALL_LABELS),
+    )
+
+
 def _is_valid_image(data: bytes) -> bool:
     """Check if bytes represent a valid image (JPEG, PNG, etc.).
 
@@ -171,7 +214,7 @@ async def upload_training_image(request: UploadRequest):
     try:
         s3_key = s3_service.upload_training_image(
             data=image_bytes,
-            label=request.label.value,
+            label=request.label,
         )
     except Exception as e:
         logger.error(f"Upload error: {str(e)}")
@@ -180,7 +223,7 @@ async def upload_training_image(request: UploadRequest):
     return UploadResponse(
         success=True,
         s3_key=s3_key,
-        label=request.label.value,
+        label=request.label,
     )
 
 

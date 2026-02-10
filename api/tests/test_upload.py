@@ -21,17 +21,17 @@ def test_upload_valid_jpeg():
     encoded = base64.b64encode(image_data).decode()
 
     with patch("src.main.s3_service.upload_training_image") as mock_upload:
-        mock_upload.return_value = "recyclable/test-key.jpeg"
+        mock_upload.return_value = "aluminum-can/test-key.jpeg"
 
         response = client.post(
             "/upload",
-            json={"image_base64": encoded, "label": "recyclable"},
+            json={"image_base64": encoded, "label": "aluminum-can"},
         )
 
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
-        assert data["label"] == "recyclable"
+        assert data["label"] == "aluminum-can"
         assert "test-key" in data["s3_key"]
         mock_upload.assert_called_once()
 
@@ -42,24 +42,24 @@ def test_upload_valid_png():
     encoded = base64.b64encode(image_data).decode()
 
     with patch("src.main.s3_service.upload_training_image") as mock_upload:
-        mock_upload.return_value = "not_recyclable/test-key.png"
+        mock_upload.return_value = "glass-bottle/test-key.png"
 
         response = client.post(
             "/upload",
-            json={"image_base64": encoded, "label": "not_recyclable"},
+            json={"image_base64": encoded, "label": "glass-bottle"},
         )
 
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
-        assert data["label"] == "not_recyclable"
+        assert data["label"] == "glass-bottle"
 
 
 def test_upload_invalid_base64():
     """Test upload with invalid base64 data."""
     response = client.post(
         "/upload",
-        json={"image_base64": "not-valid-base64!!!", "label": "recyclable"},
+        json={"image_base64": "not-valid-base64!!!", "label": "aluminum-can"},
     )
 
     assert response.status_code == 400
@@ -73,7 +73,7 @@ def test_upload_invalid_image_format():
 
     response = client.post(
         "/upload",
-        json={"image_base64": encoded, "label": "recyclable"},
+        json={"image_base64": encoded, "label": "aluminum-can"},
     )
 
     assert response.status_code == 400
@@ -93,6 +93,19 @@ def test_upload_invalid_label():
     assert response.status_code == 422  # Pydantic validation error
 
 
+def test_upload_old_binary_label_rejected():
+    """Test that old binary labels are rejected with 422."""
+    image_data = JPEG_HEADER + b"\x00" * 100
+    encoded = base64.b64encode(image_data).decode()
+
+    for old_label in ["recyclable", "not_recyclable"]:
+        response = client.post(
+            "/upload",
+            json={"image_base64": encoded, "label": old_label},
+        )
+        assert response.status_code == 422
+
+
 def test_upload_s3_error():
     """Test upload when S3 fails."""
     image_data = JPEG_HEADER + b"\x00" * 100
@@ -103,7 +116,7 @@ def test_upload_s3_error():
 
         response = client.post(
             "/upload",
-            json={"image_base64": encoded, "label": "recyclable"},
+            json={"image_base64": encoded, "label": "aluminum-can"},
         )
 
         assert response.status_code == 500
