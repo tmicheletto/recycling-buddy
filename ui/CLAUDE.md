@@ -46,7 +46,7 @@ ui/
 1. **Type Safety**: Use TypeScript strictly, no `any` types
 2. **Component Composition**: Build small, reusable components
 3. **Hooks**: Use functional components with hooks
-4. **Shared Types**: Import types from `../shared/types/`
+4. **Types**: Import types from `./types/`
 5. **Error Handling**: Show user-friendly error messages
 
 ## Common Tasks
@@ -90,7 +90,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 **Create API service:**
 ```typescript
 // src/services/api.ts
-import type { PredictionResponse } from '../../shared/types/prediction';
+import type { PredictionResponse } from '../types';
 
 const API_URL = import.meta.env.API_URL || 'http://localhost:8000';
 
@@ -137,7 +137,7 @@ const handleImageSubmit = async (file: File) => {
 // src/hooks/useImageClassification.ts
 import { useState } from 'react';
 import { classifyImage } from '../services/api';
-import type { PredictionResponse } from '../../shared/types/prediction';
+import type { PredictionResponse } from '../types';
 
 export const useImageClassification = () => {
   const [result, setResult] = useState<PredictionResponse | null>(null);
@@ -170,7 +170,7 @@ export const useImageClassification = () => {
 export type {
   PredictionResponse,
   RecyclingCategory
-} from '../../shared/types/prediction';
+} from '../types';
 ```
 
 **Use in components:**

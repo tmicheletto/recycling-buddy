@@ -10,8 +10,7 @@ This is a monorepo containing three main components:
 recycling-buddy/
 ├── model/      # ML model for image classification
 ├── api/        # FastAPI backend service
-├── ui/         # React frontend
-└── shared/     # Shared types and utilities
+└── ui/         # React frontend
 ```
 
 ## Tech Stack
@@ -97,8 +96,6 @@ recycling-buddy/
 │   ├── src/              # React application
 │   ├── public/           # Static assets
 │   └── Dockerfile        # UI container
-├── shared/
-│   └── types/            # Shared type definitions
 └── docker-compose.yml    # Service orchestration
 ```
 

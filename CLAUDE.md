@@ -14,8 +14,7 @@ Recycling Buddy is an ML-powered image classification system for identifying rec
 recycling-buddy/
 ├── model/          # ML image classification component
 ├── api/            # FastAPI backend service
-├── ui/             # React frontend
-└── shared/         # Shared types and utilities
+└── ui/             # React frontend
 ```
 
 Each component has its own `CLAUDE.md` with component-specific guidance:
@@ -44,7 +43,6 @@ Each component has its own `CLAUDE.md` with component-specific guidance:
 
 - **UI → API**: REST API calls (fetch/axios)
 - **API → Model**: Python imports (model loaded in API process)
-- **Shared types**: TypeScript types in `shared/types/` for UI/API contract
 
 ## Development Workflow
 
@@ -92,8 +90,7 @@ cd ui && npm test
 ## Key Development Principles
 
 1. **Type Safety**: Use TypeScript in UI, Pydantic models in API
-2. **Shared Types**: Keep `shared/types/` in sync with API responses
-3. **Documentation**: Update README.md files when adding features
+2. **Documentation**: Update README.md files when adding features
 4. **Testing**: Write tests for new endpoints and components
 5. **Docker First**: Ensure changes work in Docker environment
 
@@ -103,7 +100,7 @@ cd ui && npm test
 
 1. Add route in `api/src/main.py` or create in `api/src/routes/`
 2. Define Pydantic request/response models
-3. Update `shared/types/` with TypeScript equivalents
+3. Update `ui/src/types/` with TypeScript equivalents
 4. Add tests in `api/tests/`
 5. Update `api/README.md` with endpoint documentation
 
@@ -118,7 +115,7 @@ cd ui && npm test
 ### Adding UI Components
 
 1. Create component in `ui/src/components/`
-2. Use shared types from `shared/types/`
+2. Use types from `ui/src/types/`
 3. Add tests in `ui/src/__tests__/` (when test setup complete)
 4. Update `ui/README.md` if significant feature
 

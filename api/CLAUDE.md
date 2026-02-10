@@ -79,7 +79,7 @@ async def new_endpoint(request: NewRequest):
     return NewResponse(result="success")
 ```
 
-3. **Update shared types** in `../shared/types/` with TypeScript equivalent
+3. **Update UI types** in `../ui/src/types/` with TypeScript equivalent
 
 4. **Add tests** in `tests/test_endpoints.py`
 
@@ -281,7 +281,7 @@ docker run -p 8000:8000 recycling-buddy-api
 
 ## Shared Types
 
-**Keep `../shared/types/prediction.ts` in sync with Pydantic models.**
+**Keep `../ui/src/types/index.ts` in sync with Pydantic models.**
 
 **Example Pydantic model:**
 ```python
