@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     aws_region: str = "us-east-1"
     aws_access_key_id: str | None = None
     aws_secret_access_key: str | None = None
+    cors_origins: str = "http://localhost:5173"
 
     model_config = {
         "env_file": f"config/{os.getenv('ENVIRONMENT', 'DEV').lower()}.env",
