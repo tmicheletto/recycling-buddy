@@ -1,10 +1,20 @@
-import type { UploadLabel, UploadResponse } from '../types/index.ts';
+import type { LabelsResponse, UploadResponse } from '../types/index.ts';
 
 const API_URL = import.meta.env.API_URL || 'http://localhost:8000';
 
+export async function fetchLabels(): Promise<LabelsResponse> {
+  const response = await fetch(`${API_URL}/labels`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch labels (${response.status})`);
+  }
+
+  return response.json();
+}
+
 export async function uploadImage(
   imageBase64: string,
-  label: UploadLabel,
+  label: string,
 ): Promise<UploadResponse> {
   const response = await fetch(`${API_URL}/upload`, {
     method: 'POST',

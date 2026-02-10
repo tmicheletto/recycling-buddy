@@ -1,26 +1,29 @@
 import { useRef, useState } from 'react';
 import { useImageUpload } from '../hooks/useImageUpload.ts';
-import type { UploadLabel } from '../types/index.ts';
+import { useLabels } from '../hooks/useLabels.ts';
 import './PhotoCapture.css';
 
-type Phase = 'capture' | 'preview' | 'uploading' | 'result';
+type Phase = 'capture' | 'label' | 'uploading' | 'result';
 
 export function PhotoCapture() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [phase, setPhase] = useState<Phase>('capture');
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { error, result, upload, reset: resetUpload } = useImageUpload();
+  const { categories, isLoading: labelsLoading, error: labelsError } = useLabels();
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = e.target.files?.[0];
     if (!selected) return;
     setFile(selected);
     setPreviewUrl(URL.createObjectURL(selected));
-    setPhase('preview');
+    setSelectedCategory(null);
+    setPhase('label');
   }
 
-  async function handleLabel(label: UploadLabel) {
+  async function handleLabel(label: string) {
     if (!file) return;
     setPhase('uploading');
     await upload(file, label);
@@ -31,11 +34,13 @@ export function PhotoCapture() {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     setFile(null);
     setPreviewUrl(null);
+    setSelectedCategory(null);
     resetUpload();
     setPhase('capture');
-    // Clear the input so the same file can be re-selected
     if (inputRef.current) inputRef.current.value = '';
   }
+
+  const activeCategory = categories.find((c) => c.category === selectedCategory);
 
   return (
     <div className="photo-capture">
@@ -58,23 +63,52 @@ export function PhotoCapture() {
         </>
       )}
 
-      {phase === 'preview' && previewUrl && (
+      {phase === 'label' && previewUrl && (
         <div className="preview-container">
           <img src={previewUrl} alt="Captured photo" className="preview-image" />
-          <div className="label-buttons">
-            <button
-              className="label-button label-button--recyclable"
-              onClick={() => handleLabel('recyclable')}
-            >
-              Recyclable
-            </button>
-            <button
-              className="label-button label-button--not-recyclable"
-              onClick={() => handleLabel('not_recyclable')}
-            >
-              Not Recyclable
-            </button>
-          </div>
+
+          {labelsLoading && <p>Loading labels...</p>}
+          {labelsError && <p className="label-error">Could not load labels: {labelsError}</p>}
+
+          {!labelsLoading && !labelsError && !selectedCategory && (
+            <div className="label-picker">
+              <p className="picker-prompt">What is this item?</p>
+              <div className="category-list">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.category}
+                    className="category-button"
+                    onClick={() => setSelectedCategory(cat.category)}
+                  >
+                    {cat.category}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!labelsLoading && !labelsError && activeCategory && (
+            <div className="label-picker">
+              <button
+                className="back-button"
+                onClick={() => setSelectedCategory(null)}
+              >
+                &larr; {activeCategory.category}
+              </button>
+              <div className="item-list">
+                {activeCategory.items.map((item) => (
+                  <button
+                    key={item.value}
+                    className="item-button"
+                    onClick={() => handleLabel(item.value)}
+                  >
+                    {item.display_name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <button className="retake-button" onClick={handleReset}>
             Retake
           </button>

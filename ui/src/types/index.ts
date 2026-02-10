@@ -19,11 +19,24 @@ export interface HealthResponse {
   version: string;
 }
 
-export type UploadLabel = 'recyclable' | 'not_recyclable';
+export interface LabelItem {
+  value: string;
+  display_name: string;
+}
+
+export interface LabelCategory {
+  category: string;
+  items: LabelItem[];
+}
+
+export interface LabelsResponse {
+  categories: LabelCategory[];
+  total_count: number;
+}
 
 export interface UploadRequest {
   image_base64: string;
-  label: UploadLabel;
+  label: string;
 }
 
 export interface UploadResponse {
