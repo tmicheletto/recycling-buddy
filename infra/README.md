@@ -86,9 +86,8 @@ docker push $(cd ../infra && terraform output -raw ecr_repository_url):latest
 ### Deploy UI
 
 ```bash
-# 1. Build UI with API URL
-cd ../ui
-VITE_API_URL=$(cd ../infra && terraform output -raw api_url) npm run build
+# 1. Build UI with test environment API URL
+cd ../ui && npm run build -- --mode test
 
 # 2. Sync to S3
 aws s3 sync dist/ s3://$(cd ../infra && terraform output -raw ui_bucket)/ --delete

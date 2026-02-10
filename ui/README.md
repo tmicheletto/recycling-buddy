@@ -58,10 +58,14 @@ docker run -p 5173:5173 recycling-buddy-ui
 
 ## Environment Variables
 
-Create a `.env` file:
+Environment files use Vite's `--mode` flag:
 
-```
-VITE_API_URL=http://localhost:8000
+- `.env.dev` — local development (`API_URL=http://localhost:8000`)
+- `.env.test` — deployed test environment
+
+```bash
+npm run dev -- --mode dev
+npm run build -- --mode test
 ```
 
 ## Features

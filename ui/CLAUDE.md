@@ -92,7 +92,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 // src/services/api.ts
 import type { PredictionResponse } from '../../shared/types/prediction';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.API_URL || 'http://localhost:8000';
 
 export const classifyImage = async (file: File): Promise<PredictionResponse> => {
   const formData = new FormData();
@@ -213,15 +213,15 @@ import styles from './Component.module.css';
 
 **Create `.env` file:**
 ```
-VITE_API_URL=http://localhost:8000
+API_URL=http://localhost:8000
 ```
 
 **Access in code:**
 ```typescript
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.API_URL;
 ```
 
-**Note:** Vite only exposes vars prefixed with `VITE_`
+**Note:** Vite exposes vars prefixed with `VITE_` or `API_` (configured in `vite.config.ts`)
 
 ## Form Handling
 

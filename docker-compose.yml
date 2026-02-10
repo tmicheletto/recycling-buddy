@@ -34,7 +34,7 @@ services:
       - ./ui/src:/app/src
       - ./ui/public:/app/public
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - API_URL=http://localhost:8000
     command: npm run dev -- --host
 
   model:
