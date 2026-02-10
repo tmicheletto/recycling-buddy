@@ -60,8 +60,8 @@ docker run -p 5173:5173 recycling-buddy-ui
 
 Environment files use Vite's `--mode` flag:
 
-- `.env.dev` — local development (`API_URL=http://localhost:8000`)
-- `.env.test` — deployed test environment
+- `config/.env.dev` — local development (`API_URL=http://localhost:8000`)
+- `config/.env.test` — deployed test environment
 
 ```bash
 npm run dev -- --mode dev

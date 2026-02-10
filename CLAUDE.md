@@ -123,7 +123,7 @@ cd ui && npm test
 
 Each component may have its own `.env` file:
 - `api/.env`: Model paths, API keys
-- `ui/.env.dev`: API URL (`API_URL`)
+- `ui/config/.env.dev`: API URL (`API_URL`)
 
 Never commit `.env` files (already in `.gitignore`).
 
