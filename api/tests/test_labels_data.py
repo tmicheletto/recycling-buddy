@@ -44,7 +44,7 @@ def test_is_s3_safe():
 
 def test_total_label_count():
     """Test the expected total number of labels."""
-    assert len(ALL_LABELS) == 114
+    assert len(ALL_LABELS) == 124
 
 
 def test_list_is_sorted():
