@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useImageUpload } from '../hooks/useImageUpload.ts';
 import { useLabels } from '../hooks/useLabels.ts';
+import { ItemPicker } from './ItemPicker.tsx';
 import './PhotoCapture.css';
 
 type Phase = 'capture' | 'label' | 'uploading' | 'result';
@@ -10,7 +11,6 @@ export function PhotoCapture() {
   const [phase, setPhase] = useState<Phase>('capture');
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { error, result, upload, reset: resetUpload } = useImageUpload();
   const { categories, isLoading: labelsLoading, error: labelsError } = useLabels();
 
@@ -19,7 +19,6 @@ export function PhotoCapture() {
     if (!selected) return;
     setFile(selected);
     setPreviewUrl(URL.createObjectURL(selected));
-    setSelectedCategory(null);
     setPhase('label');
   }
 
@@ -34,13 +33,10 @@ export function PhotoCapture() {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     setFile(null);
     setPreviewUrl(null);
-    setSelectedCategory(null);
     resetUpload();
     setPhase('capture');
     if (inputRef.current) inputRef.current.value = '';
   }
-
-  const activeCategory = categories.find((c) => c.category === selectedCategory);
 
   return (
     <div className="photo-capture">
@@ -70,43 +66,8 @@ export function PhotoCapture() {
           {labelsLoading && <p>Loading labels...</p>}
           {labelsError && <p className="label-error">Could not load labels: {labelsError}</p>}
 
-          {!labelsLoading && !labelsError && !selectedCategory && (
-            <div className="label-picker">
-              <p className="picker-prompt">What is this item?</p>
-              <div className="category-list">
-                {categories.map((cat) => (
-                  <button
-                    key={cat.category}
-                    className="category-button"
-                    onClick={() => setSelectedCategory(cat.category)}
-                  >
-                    {cat.category}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {!labelsLoading && !labelsError && activeCategory && (
-            <div className="label-picker">
-              <button
-                className="back-button"
-                onClick={() => setSelectedCategory(null)}
-              >
-                &larr; {activeCategory.category}
-              </button>
-              <div className="item-list">
-                {activeCategory.items.map((item) => (
-                  <button
-                    key={item.value}
-                    className="item-button"
-                    onClick={() => handleLabel(item.value)}
-                  >
-                    {item.display_name}
-                  </button>
-                ))}
-              </div>
-            </div>
+          {!labelsLoading && !labelsError && (
+            <ItemPicker categories={categories} onSelect={handleLabel} />
           )}
 
           <button className="retake-button" onClick={handleReset}>
