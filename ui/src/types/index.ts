@@ -24,13 +24,8 @@ export interface LabelItem {
   display_name: string;
 }
 
-export interface LabelCategory {
-  category: string;
-  items: LabelItem[];
-}
-
 export interface LabelsResponse {
-  categories: LabelCategory[];
+  items: LabelItem[];
   total_count: number;
 }
 

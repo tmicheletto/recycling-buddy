@@ -2,18 +2,7 @@
 
 import re
 
-from src.labels import ALL_LABELS, LABELS_BY_CATEGORY, is_s3_safe, is_valid_label
-
-
-def test_no_duplicate_labels():
-    """Test that no label appears in more than one category."""
-    seen: dict[str, str] = {}
-    for category, items in LABELS_BY_CATEGORY.items():
-        for label in items:
-            assert label not in seen, (
-                f"Duplicate label '{label}' in '{category}' and '{seen[label]}'"
-            )
-            seen[label] = category
+from src.labels import ALL_LABELS, ALL_LABELS_LIST, is_s3_safe, is_valid_label
 
 
 def test_all_labels_s3_safe():
@@ -23,10 +12,9 @@ def test_all_labels_s3_safe():
         assert pattern.match(label), f"Label '{label}' is not S3-safe"
 
 
-def test_all_labels_frozenset_matches_dict():
-    """Test that ALL_LABELS contains exactly the labels from the dict."""
-    from_dict = {label for items in LABELS_BY_CATEGORY.values() for label in items}
-    assert ALL_LABELS == from_dict
+def test_all_labels_frozenset_matches_list():
+    """Test that ALL_LABELS contains exactly the labels from the list."""
+    assert ALL_LABELS == set(ALL_LABELS_LIST)
 
 
 def test_is_valid_label_accepts_known():
@@ -54,12 +42,11 @@ def test_is_s3_safe():
     assert not is_s3_safe("123-starts-with-digit")
 
 
-def test_categories_non_empty():
-    """Test that every category has at least one label."""
-    for category, items in LABELS_BY_CATEGORY.items():
-        assert len(items) > 0, f"Category '{category}' is empty"
-
-
 def test_total_label_count():
     """Test the expected total number of labels."""
     assert len(ALL_LABELS) == 114
+
+
+def test_list_is_sorted():
+    """Test that ALL_LABELS_LIST is alphabetically sorted."""
+    assert ALL_LABELS_LIST == sorted(ALL_LABELS_LIST)

@@ -2,7 +2,7 @@
 
 from fastapi.testclient import TestClient
 
-from src.labels import ALL_LABELS, LABELS_BY_CATEGORY
+from src.labels import ALL_LABELS
 from src.main import app
 
 client = TestClient(app)
@@ -14,20 +14,10 @@ def test_labels_response_structure():
     assert response.status_code == 200
 
     data = response.json()
-    assert "categories" in data
+    assert "items" in data
     assert "total_count" in data
-    assert isinstance(data["categories"], list)
+    assert isinstance(data["items"], list)
     assert data["total_count"] == len(ALL_LABELS)
-
-
-def test_labels_category_completeness():
-    """Test that all categories from labels module are present."""
-    response = client.get("/labels")
-    data = response.json()
-
-    returned_categories = {c["category"] for c in data["categories"]}
-    expected_categories = set(LABELS_BY_CATEGORY.keys())
-    assert returned_categories == expected_categories
 
 
 def test_labels_item_structure():
@@ -35,12 +25,9 @@ def test_labels_item_structure():
     response = client.get("/labels")
     data = response.json()
 
-    for category in data["categories"]:
-        assert "category" in category
-        assert "items" in category
-        for item in category["items"]:
-            assert "value" in item
-            assert "display_name" in item
+    for item in data["items"]:
+        assert "value" in item
+        assert "display_name" in item
 
 
 def test_labels_display_name_formatting():
@@ -49,11 +36,10 @@ def test_labels_display_name_formatting():
     data = response.json()
 
     # Find aluminum-can and check its display name
-    for category in data["categories"]:
-        for item in category["items"]:
-            if item["value"] == "aluminum-can":
-                assert item["display_name"] == "Aluminum Can"
-                return
+    for item in data["items"]:
+        if item["value"] == "aluminum-can":
+            assert item["display_name"] == "Aluminum Can"
+            return
 
     raise AssertionError("aluminum-can not found in response")
 
@@ -66,11 +52,8 @@ def test_labels_values_are_s3_safe():
     data = response.json()
 
     pattern = re.compile(r"^[a-z][a-z0-9-]*$")
-    for category in data["categories"]:
-        for item in category["items"]:
-            assert pattern.match(item["value"]), (
-                f"Label '{item['value']}' is not S3-safe"
-            )
+    for item in data["items"]:
+        assert pattern.match(item["value"]), f"Label '{item['value']}' is not S3-safe"
 
 
 def test_labels_total_count_matches():
@@ -78,5 +61,4 @@ def test_labels_total_count_matches():
     response = client.get("/labels")
     data = response.json()
 
-    actual_count = sum(len(cat["items"]) for cat in data["categories"])
-    assert data["total_count"] == actual_count
+    assert data["total_count"] == len(data["items"])

@@ -12,7 +12,7 @@ export function PhotoCapture() {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { error, result, upload, reset: resetUpload } = useImageUpload();
-  const { categories, isLoading: labelsLoading, error: labelsError } = useLabels();
+  const { items, isLoading: labelsLoading, error: labelsError } = useLabels();
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = e.target.files?.[0];
@@ -67,7 +67,7 @@ export function PhotoCapture() {
           {labelsError && <p className="label-error">Could not load labels: {labelsError}</p>}
 
           {!labelsLoading && !labelsError && (
-            <ItemPicker categories={categories} onSelect={handleLabel} />
+            <ItemPicker items={items} onSelect={handleLabel} />
           )}
 
           <button className="retake-button" onClick={handleReset}>

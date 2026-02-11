@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 
 from src.config import settings
-from src.labels import ALL_LABELS, LABELS_BY_CATEGORY
+from src.labels import ALL_LABELS, ALL_LABELS_LIST
 from src.services.s3 import S3Service
 
 # Configure logging
@@ -66,17 +66,10 @@ class LabelItem(BaseModel):
     display_name: str
 
 
-class LabelCategory(BaseModel):
-    """A category containing label items."""
-
-    category: str
-    items: list[LabelItem]
-
-
 class LabelsResponse(BaseModel):
     """Response for GET /labels."""
 
-    categories: list[LabelCategory]
+    items: list[LabelItem]
     total_count: int
 
 
@@ -157,19 +150,13 @@ def _display_name(label: str) -> str:
 
 @app.get("/labels", response_model=LabelsResponse)
 async def get_labels():
-    """Return all valid labels grouped by category."""
-    categories = [
-        LabelCategory(
-            category=cat,
-            items=[
-                LabelItem(value=lbl, display_name=_display_name(lbl)) for lbl in items
-            ],
-        )
-        for cat, items in LABELS_BY_CATEGORY.items()
+    """Return all valid labels as a flat list."""
+    items = [
+        LabelItem(value=lbl, display_name=_display_name(lbl)) for lbl in ALL_LABELS_LIST
     ]
     return LabelsResponse(
-        categories=categories,
-        total_count=len(ALL_LABELS),
+        items=items,
+        total_count=len(items),
     )
 
 

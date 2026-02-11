@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { fetchLabels } from '../services/api.ts';
-import type { LabelCategory } from '../types/index.ts';
+import type { LabelItem } from '../types/index.ts';
 
 export function useLabels() {
-  const [categories, setCategories] = useState<LabelCategory[]>([]);
+  const [items, setItems] = useState<LabelItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -13,7 +13,7 @@ export function useLabels() {
     fetchLabels()
       .then((data) => {
         if (!cancelled) {
-          setCategories(data.categories);
+          setItems(data.items);
           setIsLoading(false);
         }
       })
@@ -29,5 +29,5 @@ export function useLabels() {
     };
   }, []);
 
-  return { categories, isLoading, error };
+  return { items, isLoading, error };
 }
