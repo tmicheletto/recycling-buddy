@@ -81,6 +81,10 @@ cd api && pytest
 cd ui && npm test
 ```
 
+### General Hygeine
+
+- When committing changes always leave the working tree clean with no uncomitted changes, if there are any, ask me what to do with them.
+
 ### Code Quality
 
 - **Python**: Use pytest for testing, follow PEP 8
@@ -124,8 +128,6 @@ cd ui && npm test
 Each component may have its own `.env` file:
 - `api/.env`: Model paths, API keys
 - `ui/config/.env.dev`: API URL (`API_URL`)
-
-Never commit `.env` files (already in `.gitignore`).
 
 ## Troubleshooting
 
