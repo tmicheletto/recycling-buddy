@@ -50,7 +50,7 @@ infra/
 
 ## Development Workflow
 
-- Always run `terraform validate` and `terraform fmt` before committing.
+- Always run `make fmt`, `make validate` and `make plan` before committing.
 
 ### Production Builds
 
