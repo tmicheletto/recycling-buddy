@@ -35,13 +35,13 @@ def test_labels_display_name_formatting():
     response = client.get("/labels")
     data = response.json()
 
-    # Find aluminum-can and check its display name
+    # Find metal-cans-tins and check its display name
     for item in data["items"]:
-        if item["value"] == "aluminum-can":
-            assert item["display_name"] == "Aluminum Can"
+        if item["value"] == "metal-cans-tins":
+            assert item["display_name"] == "Metal Cans Tins"
             return
 
-    raise AssertionError("aluminum-can not found in response")
+    raise AssertionError("metal-cans-tins not found in response")
 
 
 def test_labels_values_are_s3_safe():
