@@ -8,6 +8,17 @@ Recycling Buddy is a mobile-friendly web app that helps Australian households co
 
 A user can photograph any household waste item and immediately know exactly which bin it belongs in, based on their council's actual rules.
 
+## Current Milestone: v1.0 Recycling Advice System
+
+**Goal:** Deliver a working end-to-end recycling advisor — classify a photographed item, resolve the user's council, and tell them which bin it goes in.
+
+**Target features:**
+- Photo capture → item classification (using existing classifier)
+- Browser geolocation → Australian council resolution
+- Council rules data layer (recyclingnearyou.com.au)
+- Bin advice UI: which bin + prep instructions
+- Mobile-optimised camera-first interface
+
 ## Requirements
 
 ### Validated
@@ -63,4 +74,4 @@ The main unknowns are the guidelines data layer: how to map (item_category, coun
 | Extend existing React UI | Already has photo capture scaffold; avoid rewrite | — Pending |
 
 ---
-*Last updated: 2026-02-26 after initialization*
+*Last updated: 2026-02-26 after milestone v1.0 start*
