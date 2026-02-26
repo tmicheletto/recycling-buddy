@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-26T04:06:38.472Z"
+last_updated: "2026-02-26T08:39:00.889Z"
 progress:
   total_phases: 1
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 4
+  completed_plans: 4
 ---
 
 # Project State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-02-26)
 Phase: 1 of 4 (Guidelines Data Layer)
 Plan: 0 of TBD in current phase
 Status: Ready to plan
-Last activity: 2026-02-26 — Phase 1 all 3 plans complete (label mapping, GuidelinesService, test suite)
+Last activity: 2026-02-26 — Phase 1 plan 04 complete (gap closure — graceful model-load failure)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -50,6 +50,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-guidelines-data-layer P01 | 5 | 1 tasks | 1 files |
 | Phase 01-guidelines-data-layer P02 | 2 | 2 tasks | 6 files |
 | Phase 01-guidelines-data-layer P03 | 3 | 2 tasks | 2 files |
+| Phase 01-guidelines-data-layer P04 | 1 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Recent decisions affecting current work:
 - [Phase 01-guidelines-data-layer]: TestClient used without context manager to avoid triggering FastAPI lifespan — same pattern as test_predict_endpoint.py
 - [Phase 01-guidelines-data-layer]: pytestmark = pytest.mark.asyncio at module level covers all async tests in STRICT asyncio mode
 - [Phase 01-guidelines-data-layer]: Fresh GuidelinesService instance per label in test_all_67_labels_do_not_raise avoids cache interference between label iterations
+- [Phase 01-guidelines-data-layer]: lifespan catches FileNotFoundError and sets app.state.model = None — server always starts
+- [Phase 01-guidelines-data-layer]: 503 guard placed before content-type check in /predict — model unavailability is checked first
 
 ### Pending Todos
 
@@ -83,5 +86,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Completed 01-guidelines-data-layer Plan 03 (test suite) — Phase 1 complete
+Stopped at: Completed 01-guidelines-data-layer Plan 04 (gap closure — graceful model-load failure)
 Resume file: None
