@@ -8,6 +8,7 @@ services:
     volumes:
       - ./api/src:/app/src
       - ./model:/app/model
+      - ./data:/app/data
     environment:
       - PYTHONUNBUFFERED=1
       - MODEL_ARTIFACT_PATH=/app/model/artifacts/efficientnet_b0_recycling_v1.safetensors
@@ -17,6 +18,7 @@ services:
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
       - AWS_REGION=us-east-1
+      - GUIDELINES_DATA_PATH=/app/data/label_to_rny.json
     command: uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       model:
