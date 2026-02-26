@@ -20,15 +20,20 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Guidelines Data Layer
-**Goal**: A versioned static dataset of Australian council recycling rules exists and can be queried by (item_category, council) to return a bin decision
+**Goal**: An LLM-backed guidelines lookup service exists and can be queried by (item_category, council_slug) to return a structured bin decision grounded in recyclingnearyou.com.au page content
 **Depends on**: Nothing (first phase)
 **Requirements**: DATA-01, DATA-02
 **Success Criteria** (what must be TRUE):
-  1. Running the scraper produces a JSON dataset covering all available Australian councils from recyclingnearyou.com.au, with a `scraped_at` timestamp in the schema
-  2. A lookup call for a known (item_category, council_slug) pair returns bin type, bin colour (lid colour), prep instructions, and disposal method
-  3. A lookup call for an unmapped (item_category, council_slug) pair returns a documented fallback ("check your council's website") rather than raising an error
-  4. All 67 classifier labels resolve through the `label_to_rny.json` mapping table to at least one RNY material slug (or an explicit "unmapped" entry)
-**Plans**: TBD
+  1. All 67 classifier labels resolve through the `label_to_rny.json` mapping table to at least one RNY material slug (or an explicit "unmapped" entry)
+  2. A lookup call for a known (item_category, council_slug) pair returns bin colour, bin name, prep instructions, disposal method, and special_disposal_flag
+  3. A lookup call for an unmapped (item_category, council_slug) pair returns a documented fallback (is_fallback=True, general waste, disclaimer) rather than raising an error
+  4. GET /advice?item_category=...&council_slug=... returns 200 with the AdviceResponse schema; missing params return 422
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Produce label_to_rny.json mapping all 67 classifier labels to RNY item slugs
+- [ ] 01-02-PLAN.md — Implement GuidelinesService (LLM lookup + cache) and wire GET /advice endpoint
+- [ ] 01-03-PLAN.md — Write unit and integration tests for GuidelinesService and /advice
 
 ### Phase 2: Council Resolution Service
 **Goal**: The API can resolve a user's location — either GPS coordinates or a postcode — to a council slug that matches the guidelines dataset
@@ -72,7 +77,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Guidelines Data Layer | 0/TBD | Not started | - |
+| 1. Guidelines Data Layer | 0/3 | Planned | - |
 | 2. Council Resolution Service | 0/TBD | Not started | - |
 | 3. Advice API | 0/TBD | Not started | - |
 | 4. Mobile UX Integration | 0/TBD | Not started | - |
