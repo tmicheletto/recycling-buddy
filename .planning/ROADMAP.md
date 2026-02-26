@@ -28,12 +28,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. A lookup call for a known (item_category, council_slug) pair returns bin colour, bin name, prep instructions, disposal method, and special_disposal_flag
   3. A lookup call for an unmapped (item_category, council_slug) pair returns a documented fallback (is_fallback=True, general waste, disclaimer) rather than raising an error
   4. GET /advice?item_category=...&council_slug=... returns 200 with the AdviceResponse schema; missing params return 422
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [ ] 01-01-PLAN.md — Produce label_to_rny.json mapping all 67 classifier labels to RNY item slugs
 - [ ] 01-02-PLAN.md — Implement GuidelinesService (LLM lookup + cache) and wire GET /advice endpoint
 - [ ] 01-03-PLAN.md — Write unit and integration tests for GuidelinesService and /advice
+- [ ] 01-04-PLAN.md — Gap closure: graceful model-load failure so API starts without artifact and /advice remains reachable
 
 ### Phase 2: Council Resolution Service
 **Goal**: The API can resolve a user's location — either GPS coordinates or a postcode — to a council slug that matches the guidelines dataset
@@ -77,7 +78,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Guidelines Data Layer | 3/3 | Complete   | 2026-02-26 |
+| 1. Guidelines Data Layer | 3/4 | Gap closure | 2026-02-26 |
 | 2. Council Resolution Service | 0/TBD | Not started | - |
 | 3. Advice API | 0/TBD | Not started | - |
 | 4. Mobile UX Integration | 0/TBD | Not started | - |
