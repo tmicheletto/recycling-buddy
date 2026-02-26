@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     model_artifact_path: str = (
         "model/artifacts/efficientnet_b0_recycling_v1.safetensors"
     )
+    openai_api_key: str | None = None
+    guidelines_data_path: str = "data/label_to_rny.json"
+    guidelines_cache_ttl_seconds: int = 604800  # 1 week
 
     model_config = {
         "env_file": f"config/{os.getenv('ENVIRONMENT', 'DEV').lower()}.env",
