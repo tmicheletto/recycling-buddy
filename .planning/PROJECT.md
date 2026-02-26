@@ -69,9 +69,11 @@ The main unknowns are the guidelines data layer: how to map (item_category, coun
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| recyclingnearyou.com.au as guidelines data source | Covers all Australian councils, free public access, uses same category taxonomy as our classifier | — Pending |
+| LLM-backed advice lookup (not static scraper) | Fetch RNY page at request time, pass as context to OpenAI — avoids build-time scraper, always uses current council data, in-memory cache for cost/latency | — Pending |
+| recyclingnearyou.com.au as grounding source | Fetch council item page as LLM context — same data quality as scraper approach without ETL pipeline | — Pending |
 | Browser geolocation for council resolution | No app install required; sufficient for prototype | — Pending |
 | Extend existing React UI | Already has photo capture scaffold; avoid rewrite | — Pending |
+| General waste (red bin) as uncertain-result default | Safe fallback to prevent recycling contamination when LLM confidence is low | — Pending |
 
 ---
 *Last updated: 2026-02-26 after milestone v1.0 start*
