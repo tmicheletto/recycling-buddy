@@ -1,8 +1,11 @@
 """Configuration settings for the API."""
 
 import os
+import pathlib
 
 from pydantic_settings import BaseSettings
+
+_PROJECT_ROOT = pathlib.Path(__file__).parent.parent.parent
 
 
 class Settings(BaseSettings):
@@ -18,7 +21,7 @@ class Settings(BaseSettings):
         "model/artifacts/efficientnet_b0_recycling_v1.safetensors"
     )
     openai_api_key: str | None = None
-    guidelines_data_path: str = "data/label_to_rny.json"
+    guidelines_data_path: str = str(_PROJECT_ROOT / "data" / "label_to_rny.json")
     guidelines_cache_ttl_seconds: int = 604800  # 1 week
 
     model_config = {
