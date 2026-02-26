@@ -10,7 +10,7 @@ services:
       - ./model:/app/model
     environment:
       - PYTHONUNBUFFERED=1
-      - MODEL_PATH=/app/model
+      - MODEL_ARTIFACT_PATH=/app/model/artifacts/efficientnet_b0_recycling_v1.safetensors
       - ENVIRONMENT=DEV
       - S3_BUCKET=recycling-buddy-training
       - S3_ENDPOINT_URL=http://localstack:4566
@@ -43,7 +43,11 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./model:/app
-    command: echo "Model service placeholder"
+      - ./model/artifacts:/app/artifacts
+      - ./model/checkpoints:/app/checkpoints
+    command: >
+      uv run python -c
+      "print('Model container ready — use docker-compose run model to execute training/evaluation')"
 
   localstack:
     image: localstack/localstack

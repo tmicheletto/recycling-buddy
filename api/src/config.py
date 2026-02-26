@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     aws_access_key_id: str | None = None
     aws_secret_access_key: str | None = None
     cors_origins: str = "http://localhost:5173"
+    model_artifact_path: str = (
+        "model/artifacts/efficientnet_b0_recycling_v1.safetensors"
+    )
 
     model_config = {
         "env_file": f"config/{os.getenv('ENVIRONMENT', 'DEV').lower()}.env",

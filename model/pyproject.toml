@@ -1,0 +1,49 @@
+[project]
+name = "recycling-model"
+version = "0.1.0"
+description = "ML model training and evaluation for Recycling Buddy"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "torch",
+    "torchvision",
+    "safetensors>=0.4.0",
+    "pillow>=12.0.0",
+    "boto3>=1.42.0",
+    "numpy>=1.24.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.14.0",
+    "pyrefly>=0.19.0",
+]
+
+# Use CPU-only PyTorch wheels on Linux (Docker); macOS uses PyPI wheels (includes MPS support)
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu", marker = "sys_platform == 'linux'" },
+]
+torchvision = [
+    { index = "pytorch-cpu", marker = "sys_platform == 'linux'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.pyrefly]
+search_path = ["."]

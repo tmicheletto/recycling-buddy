@@ -3,13 +3,19 @@ FastAPI application for Recycling Buddy
 """
 
 import base64
+import json
 import logging
+from contextlib import asynccontextmanager
+from datetime import datetime, timezone
+from typing import AsyncGenerator
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
+from starlette.concurrency import run_in_threadpool
 
 from src.config import settings
+from src.inference import ClassificationModel
 from src.labels import ALL_LABELS, ALL_LABELS_LIST
 from src.services.s3 import S3Service
 
@@ -17,11 +23,21 @@ from src.services.s3 import S3Service
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    """Load the classifier model at startup; release on shutdown."""
+    app.state.model = ClassificationModel.from_artifact(settings.model_artifact_path)
+    logger.info("Model loaded and ready for inference")
+    yield
+
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Recycling Buddy API",
     description="API for recycling material classification",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 # Configure CORS
@@ -109,38 +125,46 @@ async def health_check():
 
 
 @app.post("/predict", response_model=PredictionResponse)
-async def predict(file: UploadFile = File(...)):
-    """
-    Classify an uploaded image
+async def predict(request: Request, file: UploadFile = File(...)) -> PredictionResponse:
+    """Classify an uploaded waste item image.
 
     Args:
-        file: Image file to classify
+        request: FastAPI request (provides access to app.state.model).
+        file: Image file to classify (JPEG, PNG, or WEBP).
 
     Returns:
-        Classification results with label and confidence
+        PredictionResponse with top label, confidence, and top-3 categories.
     """
+    if not file.content_type or not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="File must be an image")
+
+    image_bytes = await file.read()
+
     try:
-        # Validate file type
-        if not file.content_type or not file.content_type.startswith("image/"):
-            raise HTTPException(status_code=400, detail="File must be an image")
+        result = await run_in_threadpool(request.app.state.model.predict, image_bytes)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except Exception as exc:
+        logger.error("Prediction error: %s", exc)
+        raise HTTPException(status_code=500, detail="Inference failed")
 
-        # TODO: Implement model inference
-        # For now, return a mock response
-        logger.info(f"Received image: {file.filename}")
-
-        return PredictionResponse(
-            label="recyclable",
-            confidence=0.85,
-            categories=[
-                {"recyclable": 0.85},
-                {"non-recyclable": 0.10},
-                {"compost": 0.05},
-            ],
+    # FR-013: emit structured prediction log (no image data)
+    logger.info(
+        json.dumps(
+            {
+                "event": "prediction",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "predicted_label": result.top_prediction.label,
+                "confidence": result.top_prediction.confidence,
+            }
         )
+    )
 
-    except Exception as e:
-        logger.error(f"Prediction error: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return PredictionResponse(
+        label=result.top_prediction.label,
+        confidence=result.top_prediction.confidence,
+        categories=[{pred.label: pred.confidence} for pred in result.alternatives],
+    )
 
 
 def _display_name(label: str) -> str:
