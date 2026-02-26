@@ -61,23 +61,23 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | — | Pending |
-| DATA-02 | — | Pending |
-| CNCL-01 | — | Pending |
-| CNCL-02 | — | Pending |
-| CLSF-01 | — | Pending |
-| CLSF-02 | — | Pending |
-| ADVS-01 | — | Pending |
-| ADVS-02 | — | Pending |
-| ADVS-03 | — | Pending |
-| FEND-01 | — | Pending |
-| FEND-02 | — | Pending |
+| DATA-01 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Pending |
+| CNCL-01 | Phase 2 | Pending |
+| CNCL-02 | Phase 2 | Pending |
+| CLSF-01 | Phase 3 | Pending |
+| CLSF-02 | Phase 3 | Pending |
+| ADVS-01 | Phase 3 | Pending |
+| ADVS-02 | Phase 3 | Pending |
+| ADVS-03 | Phase 3 | Pending |
+| FEND-01 | Phase 4 | Pending |
+| FEND-02 | Phase 4 | Pending |
 
 **Coverage:**
 - v1.0 requirements: 11 total
-- Mapped to phases: 0 (roadmap not yet created)
-- Unmapped: 11 ⚠️
+- Mapped to phases: 11
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-02-26*
-*Last updated: 2026-02-26 after initial definition*
+*Last updated: 2026-02-26 after roadmap creation*
