@@ -28,9 +28,13 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Load the classifier model at startup; release on shutdown."""
-    app.state.model = ClassificationModel.from_artifact(settings.model_artifact_path)
+    try:
+        app.state.model = ClassificationModel.from_artifact(settings.model_artifact_path)
+        logger.info("Model loaded and ready for inference")
+    except FileNotFoundError as exc:
+        logger.warning("Model artifact not found — /predict will return 503: %s", exc)
+        app.state.model = None
     app.state.guidelines_service = GuidelinesService()
-    logger.info("Model loaded and ready for inference")
     yield
 
 
@@ -151,6 +155,11 @@ async def predict(request: Request, file: UploadFile = File(...)) -> PredictionR
     Returns:
         PredictionResponse with top label, confidence, and top-3 categories.
     """
+    if request.app.state.model is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Model artifact not available. Run the training pipeline first.",
+        )
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File must be an image")
 
