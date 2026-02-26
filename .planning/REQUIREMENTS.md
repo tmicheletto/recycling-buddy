@@ -8,7 +8,7 @@
 
 ### Data Layer
 
-- [ ] **DATA-01**: System can scrape item-category recycling rules from recyclingnearyou.com.au for all available Australian councils and persist as a versioned static JSON dataset in the repo
+- [x] **DATA-01**: System can scrape item-category recycling rules from recyclingnearyou.com.au for all available Australian councils and persist as a versioned static JSON dataset in the repo
 - [ ] **DATA-02**: System can look up (item_category, council) and return bin type, bin colour (lid colour), prep instructions, and disposal method from the static dataset
 
 ### Council Resolution
@@ -61,7 +61,7 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 1 | Pending |
 | CNCL-01 | Phase 2 | Pending |
 | CNCL-02 | Phase 2 | Pending |
