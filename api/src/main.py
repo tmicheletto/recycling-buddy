@@ -15,6 +15,7 @@ from pydantic import BaseModel, field_validator
 from starlette.concurrency import run_in_threadpool
 
 from src.config import settings
+from src.guidelines import AdviceRecord, GuidelinesService
 from src.inference import ClassificationModel
 from src.labels import ALL_LABELS, ALL_LABELS_LIST
 from src.services.s3 import S3Service
@@ -28,6 +29,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Load the classifier model at startup; release on shutdown."""
     app.state.model = ClassificationModel.from_artifact(settings.model_artifact_path)
+    app.state.guidelines_service = GuidelinesService()
     logger.info("Model loaded and ready for inference")
     yield
 
@@ -111,6 +113,20 @@ class UploadResponse(BaseModel):
     label: str
 
 
+class AdviceResponse(BaseModel):
+    """Response for GET /advice."""
+
+    council_slug: str
+    item_category: str
+    bin_colour: str
+    bin_name: str
+    prep_instructions: str
+    disposal_method: str
+    special_disposal_flag: bool
+    notes: str
+    is_fallback: bool
+
+
 # Routes
 @app.get("/", response_model=HealthResponse)
 async def root():
@@ -181,6 +197,33 @@ async def get_labels():
     return LabelsResponse(
         items=items,
         total_count=len(items),
+    )
+
+
+@app.get("/advice", response_model=AdviceResponse)
+async def get_advice(request: Request, item_category: str, council_slug: str) -> AdviceResponse:
+    """Return council-specific bin advice for an item category.
+
+    Args:
+        request: FastAPI request (provides access to app.state.guidelines_service).
+        item_category: Classifier label (e.g. 'cardboard').
+        council_slug: RNY council slug (e.g. 'SydneyNSW').
+
+    Returns:
+        AdviceResponse with bin decision and instructions.
+    """
+    service: GuidelinesService = request.app.state.guidelines_service
+    record: AdviceRecord = await service.lookup(item_category, council_slug)
+    return AdviceResponse(
+        council_slug=record.council_slug,
+        item_category=record.item_category,
+        bin_colour=record.bin_colour,
+        bin_name=record.bin_name,
+        prep_instructions=record.prep_instructions,
+        disposal_method=record.disposal_method,
+        special_disposal_flag=record.special_disposal_flag,
+        notes=record.notes,
+        is_fallback=record.is_fallback,
     )
 
 
