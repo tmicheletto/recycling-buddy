@@ -12,7 +12,7 @@ v1.0 delivers a working end-to-end recycling advisor across four phases. Phase 1
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Guidelines Data Layer** - Scrape recyclingnearyou.com.au into a versioned static dataset and build the lookup service
+- [x] **Phase 1: Guidelines Data Layer** - Scrape recyclingnearyou.com.au into a versioned static dataset and build the lookup service (completed 2026-02-26)
 - [ ] **Phase 2: Council Resolution Service** - Resolve browser GPS coordinates and postcodes to Australian council slugs
 - [ ] **Phase 3: Advice API** - Serve structured bin decisions by connecting classification output to the guidelines dataset
 - [ ] **Phase 4: Mobile UX Integration** - Deliver the complete photo-to-advice flow on mobile with geolocation, confidence handling, and text search
@@ -77,7 +77,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Guidelines Data Layer | 2/3 | In Progress|  |
+| 1. Guidelines Data Layer | 3/3 | Complete   | 2026-02-26 |
 | 2. Council Resolution Service | 0/TBD | Not started | - |
 | 3. Advice API | 0/TBD | Not started | - |
 | 4. Mobile UX Integration | 0/TBD | Not started | - |
