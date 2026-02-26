@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-26T08:39:00.889Z"
+last_updated: "2026-02-26T09:28:57.902Z"
 progress:
   total_phases: 1
   completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
+  total_plans: 5
+  completed_plans: 5
 ---
 
 # Project State
@@ -51,6 +51,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-guidelines-data-layer P02 | 2 | 2 tasks | 6 files |
 | Phase 01-guidelines-data-layer P03 | 3 | 2 tasks | 2 files |
 | Phase 01-guidelines-data-layer P04 | 1 | 1 tasks | 1 files |
+| Phase 01-guidelines-data-layer P05 | 8 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,9 @@ Recent decisions affecting current work:
 - [Phase 01-guidelines-data-layer]: Fresh GuidelinesService instance per label in test_all_67_labels_do_not_raise avoids cache interference between label iterations
 - [Phase 01-guidelines-data-layer]: lifespan catches FileNotFoundError and sets app.state.model = None — server always starts
 - [Phase 01-guidelines-data-layer]: 503 guard placed before content-type check in /predict — model unavailability is checked first
+- [Phase 01-guidelines-data-layer]: pydantic-settings empty string env vars override str field defaults — use commented-out entries in env files to document override points without breaking defaults
+- [Phase 01-guidelines-data-layer]: guidelines_data_path default uses _PROJECT_ROOT = Path(__file__).parent.parent.parent for CWD-independent absolute path resolution
+- [Phase 01-guidelines-data-layer]: data/ directory provided at runtime via volume mount only — cannot COPY from Dockerfile because build context ./api excludes project root
 
 ### Pending Todos
 
