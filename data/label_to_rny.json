@@ -1,0 +1,337 @@
+{
+  "aerosol-cans": {
+    "rny_slug": "aerosols",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/aerosols",
+    "notes": "RNY uses 'aerosols' for aerosol cans"
+  },
+  "aluminium-foil-trays": {
+    "rny_slug": "aluminium-cans",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/aluminium-cans",
+    "notes": "RNY 'aluminium-cans' is the closest match; foil trays follow similar kerbside rules — typically recyclable if clean"
+  },
+  "animal-waste": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — RNY has no specific page for animal waste; general waste (red bin) is the standard advice"
+  },
+  "bagged-recyclables": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — describes presentation, not material; RNY advice is to empty bags and recycle contents separately; bags contaminate sorting machinery"
+  },
+  "bagged-rubbish": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — describes presentation, not material; general waste (red bin) is assumed; RNY has no page for this presentation type"
+  },
+  "batteries-electronics": {
+    "rny_slug": "batteries-single-use",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/batteries-single-use",
+    "notes": "RNY uses separate slugs 'batteries-single-use', 'lead-acid-batteries', and 'electrical' / 'electrical-battery-operated'; 'batteries-single-use' is primary; electronics may also map to 'electrical-battery-operated'"
+  },
+  "building-materials": {
+    "rny_slug": "demolition",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/demolition",
+    "notes": "RNY uses 'demolition' for building / demolition waste including timber, bricks, plaster"
+  },
+  "bulky-items": {
+    "rny_slug": "furniture",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/furniture",
+    "notes": "RNY 'furniture' is the closest for large bulky household items; also see 'whitegoods' and 'mattresses' for specific bulky items"
+  },
+  "cardboard": {
+    "rny_slug": "paper-cardboard",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/paper-cardboard",
+    "notes": "RNY combines paper and cardboard under 'paper-cardboard'"
+  },
+  "cd-dvd-cases": {
+    "rny_slug": "cds-dvds",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/cds-dvds",
+    "notes": "RNY uses 'cds-dvds' covering discs and their cases"
+  },
+  "ceramics": {
+    "rny_slug": "demolition",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/demolition",
+    "notes": "Mapped to 'demolition' as closest RNY category for hard inorganic waste; ceramics cannot go in recycling (contaminate glass); check council hard waste or skip bin options"
+  },
+  "citrus-aromatics": {
+    "rny_slug": "garden-organics",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/garden-organics",
+    "notes": "Citrus peel and aromatic plant waste is typically accepted in green organics bin; mapped to 'garden-organics' as closest RNY page; food scraps bin also relevant in some councils"
+  },
+  "clothing-textiles": {
+    "rny_slug": "clothing",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/clothing",
+    "notes": "RNY uses 'clothing' for clothing and textiles"
+  },
+  "coat-hangers": {
+    "rny_slug": "scrap-metals",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/scrap-metals",
+    "notes": "Wire/metal coat hangers map to 'scrap-metals'; plastic hangers are general waste; donation preferred where possible — LLM should advise based on material type"
+  },
+  "coffee-cups-pods": {
+    "rny_slug": "coffee-cups",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/coffee-cups",
+    "notes": "RNY uses 'coffee-cups' for takeaway cups; coffee pods/capsules have separate RNY slug 'coffee-capsules' — split in v2 if classifier is separated"
+  },
+  "compostable-liners": {
+    "rny_slug": "garden-organics",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/garden-organics",
+    "notes": "Certified compostable bin liners (AS4736) are accepted in FOGO/green organics bins in most councils; mapped to 'garden-organics' as closest RNY page; LLM should confirm council acceptance and AS4736 certification requirement"
+  },
+  "compostable-packaging": {
+    "rny_slug": "garden-organics",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/garden-organics",
+    "notes": "Certified compostable packaging may be accepted in FOGO/green organics in some councils; mapped to 'garden-organics' as closest RNY page; acceptance varies widely — LLM must confirm council-specific rules and certification status"
+  },
+  "crockery": {
+    "rny_slug": "demolition",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/demolition",
+    "notes": "Mapped to 'demolition' as closest RNY category for ceramic/hard inorganic waste; crockery cannot go in recycling (contaminates glass); council hard waste collection or charity donation if intact"
+  },
+  "dairy-eggshells": {
+    "rny_slug": "food",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/food",
+    "notes": "Dairy packaging and eggshells are organic food waste; mapped to RNY 'food' page for general food disposal advice"
+  },
+  "dead-animals": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — RNY has no page for dead animals; council pickup or vet disposal required; general waste as last resort"
+  },
+  "disposable-cutlery-plates": {
+    "rny_slug": "plastic-containers",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/plastic-containers",
+    "notes": "Rigid plastic disposable plates map to 'plastic-containers' if clean; disposable cutlery and mixed-material items are general waste; LLM should advise based on material type and cleanliness"
+  },
+  "food-leftovers": {
+    "rny_slug": "food",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/food",
+    "notes": "RNY 'food' page covers food scraps and leftovers; FOGO or green organics bin where available"
+  },
+  "food-packaging": {
+    "rny_slug": "plastic-containers",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/plastic-containers",
+    "notes": "Broad category; mapped to 'plastic-containers' as most common food packaging material; LLM should refine by specific material (glass, carton, soft plastic, paper) for accurate advice"
+  },
+  "fruit-vegetable-scraps": {
+    "rny_slug": "food",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/food",
+    "notes": "RNY 'food' covers fruit and vegetable scraps; FOGO or green organics bin where available"
+  },
+  "garden-waste": {
+    "rny_slug": "garden-organics",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/garden-organics",
+    "notes": "Direct match in concept; RNY uses 'garden-organics' for garden clippings, grass, leaves"
+  },
+  "gas-bottles-extinguishers": {
+    "rny_slug": "gas-bottles",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/gas-bottles",
+    "notes": "RNY uses 'gas-bottles'; fire extinguishers are similar hazardous pressurised containers — same disposal advice applies; special drop-off required"
+  },
+  "general-rubbish": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "General waste — no specific RNY item page; LLM uses training data; red bin (general waste) is always the answer for this category"
+  },
+  "glass-bottles-jars": {
+    "rny_slug": "glass-containers",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/glass-containers",
+    "notes": "RNY uses 'glass-containers' for glass bottles and jars"
+  },
+  "glass-mirrors": {
+    "rny_slug": "demolition",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/demolition",
+    "notes": "Mapped to 'demolition' as closest RNY category for hard waste; mirror glass cannot be recycled with container glass (different composition and coatings); hard waste collection or general waste"
+  },
+  "grains-cereals": {
+    "rny_slug": "food",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/food",
+    "notes": "Grains and cereals are organic food waste; mapped to RNY 'food' page"
+  },
+  "hair": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — RNY has no page for hair; general waste (red bin)"
+  },
+  "hazardous-chemicals": {
+    "rny_slug": "chemicals",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/chemicals",
+    "notes": "RNY 'chemicals' covers household hazardous chemicals; also see 'pool-chemicals' for pool-specific chemicals; requires special drop-off"
+  },
+  "hessian-bags": {
+    "rny_slug": "clothing",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/clothing",
+    "notes": "Hessian/jute bags are a natural fibre textile; mapped to 'clothing' as closest RNY textile category; donation or reuse preferred if in good condition; worn-out hessian to general waste"
+  },
+  "hot-ashes": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — RNY has no page for hot ashes; must be fully cooled before disposal; general waste once cold"
+  },
+  "large-logs-stumps": {
+    "rny_slug": "garden-organics",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/garden-organics",
+    "notes": "Mapped to 'garden-organics' but councils have size limits; large logs and stumps typically require hard waste or green waste collection — LLM should note size restrictions"
+  },
+  "liquids": {
+    "rny_slug": "chemicals",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/chemicals",
+    "notes": "Mapped to 'chemicals' as primary RNY page for liquid disposal; specific liquids have better matches: cooking oil → 'cooking-oil', motor oil → 'motor-oil'; LLM must refine by liquid type — never advise pouring down drain"
+  },
+  "meat-seafood-bones": {
+    "rny_slug": "food",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/food",
+    "notes": "Meat, seafood, and bones are organic food waste; mapped to RNY 'food' page; FOGO bins where available"
+  },
+  "metal-cans-tins": {
+    "rny_slug": "steel-cans",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/steel-cans",
+    "notes": "RNY uses 'steel-cans' for metal cans and tins; aluminium cans also map to 'aluminium-cans' but 'steel-cans' is the primary kerbside recyclable"
+  },
+  "motor-oil-containers": {
+    "rny_slug": "motor-oil",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/motor-oil",
+    "notes": "RNY 'motor-oil' covers motor oil and its containers; special drop-off required via DriveZero or similar program"
+  },
+  "nappies": {
+    "rny_slug": "food",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/food",
+    "notes": "Mapped to RNY 'food' as closest organic waste category; standard disposable nappies are general waste (red bin); some councils accept certified compostable nappies in FOGO — LLM should advise checking council rules"
+  },
+  "non-approved-liners": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — context-specific: bin liners that are not council-approved compostable liners; general waste (red bin)"
+  },
+  "oil-paints": {
+    "rny_slug": "paint",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/paint",
+    "notes": "RNY 'paint' covers all paint types including oil-based; special drop-off required via PaintBack program"
+  },
+  "paper": {
+    "rny_slug": "paper-cardboard",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/paper-cardboard",
+    "notes": "RNY combines paper and cardboard under 'paper-cardboard'"
+  },
+  "plant-pots": {
+    "rny_slug": "plastic-containers",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/plastic-containers",
+    "notes": "Plastic plant pots mapped to 'plastic-containers'; acceptance varies by council — many do not accept plant pots in kerbside recycling due to soil contamination and dark plastic type; check local garden centre take-back schemes"
+  },
+  "plastic-bags-soft-plastic": {
+    "rny_slug": "soft-plastics",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/soft-plastics",
+    "notes": "RNY uses 'soft-plastics' for plastic bags and soft packaging; REDcycle program paused but alternatives exist at some supermarkets"
+  },
+  "plastic-bottles-containers": {
+    "rny_slug": "plastic-containers",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/plastic-containers",
+    "notes": "RNY uses 'plastic-containers' for rigid plastic bottles and containers"
+  },
+  "plastic-coated-paper": {
+    "rny_slug": "paper-cardboard",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/paper-cardboard",
+    "notes": "Mapped to 'paper-cardboard' for RNY guidance context; however plastic-coated paper (e.g. glossy paper, thermal paper, laminated) is generally NOT recyclable kerbside — LLM must clarify that coating prevents recycling and advise general waste"
+  },
+  "plastic-lids": {
+    "rny_slug": "plastic-containers",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/plastic-containers",
+    "notes": "Mapped to 'plastic-containers'; lids should be screwed back onto bottles before recycling per most council advice"
+  },
+  "plastic-lined-cardboard": {
+    "rny_slug": "cartons",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/cartons",
+    "notes": "RNY 'cartons' covers liquid paperboard (Tetrapak, milk cartons) which are cardboard with plastic/foil lining; some councils accept kerbside"
+  },
+  "plastic-strapping": {
+    "rny_slug": "soft-plastics",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/soft-plastics",
+    "notes": "Plastic strapping is a type of soft plastic; mapped to 'soft-plastics' — cannot be recycled kerbside, requires soft plastics drop-off"
+  },
+  "plastic-tubes": {
+    "rny_slug": "plastic-containers",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/plastic-containers",
+    "notes": "Plastic tubes (toothpaste tubes, hand cream, etc.) mapped to 'plastic-containers'; acceptance varies — rigid HDPE/PP tubes yes, soft multi-layer tubes often general waste"
+  },
+  "polystyrene-foam": {
+    "rny_slug": "polystyrene",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/polystyrene",
+    "notes": "RNY uses 'polystyrene' for polystyrene foam (EPS); generally not accepted kerbside; special drop-off or general waste"
+  },
+  "reusable-containers": {
+    "rny_slug": "plastic-containers",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/plastic-containers",
+    "notes": "Mapped to 'plastic-containers' for end-of-life disposal guidance; reusable containers should first be donated or reused; if disposal needed, material-specific pages apply (plastic, glass, metal)"
+  },
+  "rocks-soil": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — RNY has no page for rocks and soil; cannot go in any kerbside bin; requires hard waste collection or skip bin"
+  },
+  "scrap-metal": {
+    "rny_slug": "scrap-metals",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/scrap-metals",
+    "notes": "RNY uses 'scrap-metals' for scrap metal; typically requires hard waste collection or metal recycler drop-off"
+  },
+  "seafood-shells": {
+    "rny_slug": "food",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/food",
+    "notes": "Seafood shells (oyster, mussel, prawn) are organic material; mapped to RNY 'food' page; accepted in FOGO bins in many councils"
+  },
+  "shredded-laminated-paper": {
+    "rny_slug": "paper-cardboard",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/paper-cardboard",
+    "notes": "Mapped to 'paper-cardboard' for context; shredded paper clogs sorting machinery — some councils accept in sealed clear bag in recycling; laminated paper is NOT recyclable (general waste); LLM must distinguish between shredded and laminated paper"
+  },
+  "steel-pots-pans": {
+    "rny_slug": "scrap-metals",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/scrap-metals",
+    "notes": "Steel pots and pans are scrap metal; too large for kerbside recycling bin; requires hard waste collection or metal recycler"
+  },
+  "syringes-sharps": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — RNY has no page for sharps; must use sharps disposal containers and council sharps programs; never in any kerbside bin"
+  },
+  "tea-coffee-grounds": {
+    "rny_slug": "food",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/food",
+    "notes": "Tea leaves and coffee grounds are organic food waste; mapped to RNY 'food' page; accepted in FOGO or green organics bins"
+  },
+  "teabags": {
+    "rny_slug": "food",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/food",
+    "notes": "Teabags are organic food waste; most modern teabags contain plastic mesh — check brand; mapped to RNY 'food' for FOGO guidance"
+  },
+  "tissues-paper-towel": {
+    "rny_slug": "paper-cardboard",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/paper-cardboard",
+    "notes": "Mapped to 'paper-cardboard' for context; used tissues and paper towels are NOT recyclable (contamination, short fibres) — general waste; clean/unused paper towels could theoretically be composted in FOGO but this is uncommon advice"
+  },
+  "toothpaste-toothbrushes": {
+    "rny_slug": "plastic-containers",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/plastic-containers",
+    "notes": "Mapped to 'plastic-containers' for guidance context; toothpaste tubes are multi-layer (not recyclable kerbside); plastic toothbrushes are general waste; Colgate recycling program via TerraCycle at some pharmacies — LLM should mention specialty recycling option"
+  },
+  "vacuum-dust": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — RNY has no page for vacuum dust; general waste (red bin); contains mixed fine materials including fibres and soil"
+  },
+  "waxed-cardboard": {
+    "rny_slug": "paper-cardboard",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/paper-cardboard",
+    "notes": "Mapped to 'paper-cardboard' for guidance context; waxed cardboard is NOT accepted in kerbside recycling (wax coating prevents pulping) — general waste; LLM must clarify the wax coating exception to normal cardboard recycling"
+  },
+  "wet-wipes": {
+    "rny_slug": null,
+    "rny_url": null,
+    "notes": "UNMAPPED — RNY has no page for wet wipes; general waste (red bin); wet wipes contain plastic fibres and must never be flushed"
+  },
+  "wooden-utensils": {
+    "rny_slug": "garden-organics",
+    "rny_url": "https://recyclingnearyou.com.au/material/home/garden-organics",
+    "notes": "Untreated wooden utensils can go in green organics bin in many councils; treated/painted wood is general waste; mapped to 'garden-organics' with caveat about treatment"
+  }
+}
