@@ -1,0 +1,44 @@
+# Continue Here
+
+**Saved:** 2026-02-26
+**Task:** /gsd:new-project — mid-execution, resuming after API rate limit interruption
+
+## Current State
+
+Project initialization is ~70% complete. All research is done. Next step is requirements definition.
+
+## What's Done
+
+- ✓ `.planning/PROJECT.md` — committed (c48fdd9)
+- ✓ `.planning/config.json` — YOLO, standard, balanced, all agents on (a9df94c)
+- ✓ `.planning/codebase/` — 7 codebase map docs (1e3762d)
+- ✓ `.planning/research/STACK.md` — scraper stack, council resolution, mobile camera
+- ✓ `.planning/research/FEATURES.md` — table stakes, differentiators, anti-features
+- ✓ `.planning/research/ARCHITECTURE.md` — council data layer architecture
+- ✓ `.planning/research/PITFALLS.md` — 9 domain-specific pitfalls
+- ✓ `.planning/research/SUMMARY.md` — synthesized, committed (d6428fa)
+
+## What's Missing
+
+- ✗ `.planning/REQUIREMENTS.md`
+- ✗ `.planning/ROADMAP.md`
+- ✗ `.planning/STATE.md`
+
+## Next Action
+
+Run `/gsd:new-project` in a fresh context.
+
+The workflow will detect `project_exists: true` — **skip to Step 7 (Define Requirements)** since:
+- Questioning complete (PROJECT.md exists)
+- Config complete
+- Research complete (all 5 files in .planning/research/)
+
+Key research findings to inform requirements:
+- 4 suggested phases: Guidelines Data Layer → Council Resolution → Advice API → Mobile UX
+- Table stakes: bin colour, photo lookup, council-local advice, text search fallback, prep instructions, special disposal, postcode fallback, confidence handling, mobile camera
+- Critical path: guidelines data layer (scraping recyclingnearyou.com.au) blocks everything else
+- Stack additions needed: requests 2.32, beautifulsoup4 4.12, lxml 5.3, tenacity 9.0
+
+## Project Summary
+
+Recycling Buddy — Australian household waste classification app. User snaps photo → EfficientNet-B0 classifies item (67 categories) → resolve council from GPS/postcode → lookup council rules from recyclingnearyou.com.au → show bin + prep instructions.
