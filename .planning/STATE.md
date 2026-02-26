@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-26T03:56:23.129Z"
+last_updated: "2026-02-26T04:01:17.302Z"
 progress:
   total_phases: 1
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -48,6 +48,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 01-guidelines-data-layer P01 | 5 | 1 tasks | 1 files |
+| Phase 01-guidelines-data-layer P02 | 2 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -61,6 +62,9 @@ Recent decisions affecting current work:
 - [Roadmap]: Phases 2 and 3 can be developed in parallel once Phase 1 slug format is established
 - [Phase 01-guidelines-data-layer]: 55/67 classifier labels mapped to RNY slugs; 12 unmapped with explanatory notes; RNY council pages (not A-Z index) are the canonical slug source
 - [Phase 01-guidelines-data-layer]: RNY URL pattern confirmed: https://recyclingnearyou.com.au/material/home/{slug}; 49 unique slugs available across all Australian councils
+- [Phase 01-guidelines-data-layer]: gpt-4o-mini chosen for GuidelinesService — lower cost with sufficient structured extraction capability
+- [Phase 01-guidelines-data-layer]: AsyncOpenAI client only instantiated when OPENAI_API_KEY present — API starts in fallback-only mode without credentials
+- [Phase 01-guidelines-data-layer]: AdviceRecord is frozen dataclass (not Pydantic) — immutable value type; AdviceResponse Pydantic model handles API serialisation boundary
 
 ### Pending Todos
 
