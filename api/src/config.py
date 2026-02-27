@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     guidelines_cache_ttl_seconds: int = 604800  # 1 week
 
     model_config = {
-        "env_file": f"config/{os.getenv('ENVIRONMENT', 'DEV').lower()}.env",
+        "env_file": f"config/.env.{os.getenv('ENVIRONMENT', 'DEV').lower()}",
     }
 
 

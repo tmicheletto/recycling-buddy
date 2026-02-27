@@ -68,6 +68,9 @@ build/
 # LocalStack
 localstack-data/
 
+# Local env overrides
+.env.local
+
 # OS
 .DS_Store
 Thumbs.db
