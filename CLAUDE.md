@@ -29,8 +29,8 @@ uv run ruff format .                   # Format
 ### Model (`cd model`)
 ```bash
 uv run pytest
-uv run python -m src.train --s3-bucket recycling-buddy-training --output-dir artifacts/ --epochs 30 --seed 42
-uv run python -m src.evaluate --artifact artifacts/efficientnet_b0_recycling_v1.safetensors --s3-bucket recycling-buddy-training --split test
+uv run python -m recbuddy.train --s3-bucket recycling-buddy-training --output-dir artifacts/ --epochs 30 --seed 42
+uv run python -m recbuddy.evaluate --artifact artifacts/efficientnet_b0_recycling_v1.safetensors --s3-bucket recycling-buddy-training --split test
 ```
 
 ### UI (`cd ui`)
