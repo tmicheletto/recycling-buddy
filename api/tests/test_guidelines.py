@@ -1,5 +1,5 @@
 """Unit tests for GuidelinesService — fallback, cache, label coverage."""
-import asyncio
+
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -72,10 +72,14 @@ async def test_cache_prevents_second_llm_call() -> None:
     svc = GuidelinesService()
     mock_record = _make_advice_record()
 
-    with patch.object(svc, "_call_llm", new_callable=AsyncMock, return_value=mock_record) as mock_llm:
+    with patch.object(
+        svc, "_call_llm", new_callable=AsyncMock, return_value=mock_record
+    ) as mock_llm:
         await svc.lookup("cardboard", "SydneyNSW")
         await svc.lookup("cardboard", "SydneyNSW")  # second call — should hit cache
-        assert mock_llm.call_count == 1, "LLM should only be called once (second call hits cache)"
+        assert mock_llm.call_count == 1, (
+            "LLM should only be called once (second call hits cache)"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -94,10 +98,14 @@ async def test_cache_key_is_item_and_council() -> None:
             return record_sydney
         return record_melbourne
 
-    with patch.object(svc, "_call_llm", new_callable=AsyncMock, side_effect=_side_effect) as mock_llm:
+    with patch.object(
+        svc, "_call_llm", new_callable=AsyncMock, side_effect=_side_effect
+    ) as mock_llm:
         await svc.lookup("cardboard", "SydneyNSW")
         await svc.lookup("cardboard", "MelbourneVIC")
-        assert mock_llm.call_count == 2, "Different council = different cache key; LLM must be called twice"
+        assert mock_llm.call_count == 2, (
+            "Different council = different cache key; LLM must be called twice"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -112,9 +120,13 @@ async def test_all_67_labels_do_not_raise() -> None:
 
     for label in ALL_LABELS_LIST:
         svc = GuidelinesService()  # fresh instance per label avoids cache interference
-        with patch.object(svc, "_call_llm", new_callable=AsyncMock, return_value=mock_record):
+        with patch.object(
+            svc, "_call_llm", new_callable=AsyncMock, return_value=mock_record
+        ):
             result = await svc.lookup(label, "SydneyNSW")
-            assert isinstance(result, AdviceRecord), f"lookup({label!r}) did not return AdviceRecord"
+            assert isinstance(result, AdviceRecord), (
+                f"lookup({label!r}) did not return AdviceRecord"
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -164,13 +176,25 @@ async def test_fallback_record_fields_complete(monkeypatch: pytest.MonkeyPatch) 
     result = await svc.lookup("cardboard", "SydneyNSW")
 
     # All string fields must be non-None
-    for field_name in ("bin_colour", "bin_name", "prep_instructions", "disposal_method", "notes", "council_slug", "item_category"):
+    for field_name in (
+        "bin_colour",
+        "bin_name",
+        "prep_instructions",
+        "disposal_method",
+        "notes",
+        "council_slug",
+        "item_category",
+    ):
         value = getattr(result, field_name)
         assert value is not None, f"Field {field_name!r} must not be None"
 
     # Enum constraints
-    assert result.bin_colour in VALID_BIN_COLOURS, f"bin_colour {result.bin_colour!r} not in valid set"
-    assert result.disposal_method in VALID_DISPOSAL_METHODS, f"disposal_method {result.disposal_method!r} not in valid set"
+    assert result.bin_colour in VALID_BIN_COLOURS, (
+        f"bin_colour {result.bin_colour!r} not in valid set"
+    )
+    assert result.disposal_method in VALID_DISPOSAL_METHODS, (
+        f"disposal_method {result.disposal_method!r} not in valid set"
+    )
 
     # Bool fields
     assert isinstance(result.is_fallback, bool)

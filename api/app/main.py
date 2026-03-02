@@ -217,7 +217,9 @@ async def get_labels():
 
 
 @app.get("/advice", response_model=AdviceResponse)
-async def get_advice(request: Request, item_category: str, council_slug: str) -> AdviceResponse:
+async def get_advice(
+    request: Request, item_category: str, council_slug: str
+) -> AdviceResponse:
     """Return council-specific bin advice for an item category.
 
     Args:

@@ -4,6 +4,7 @@ Fetches the relevant recyclingnearyou.com.au page as grounding context,
 calls OpenAI to extract a structured bin decision, and caches results
 in-memory for 1 week (TTL from settings).
 """
+
 import json
 import logging
 import pathlib
@@ -29,10 +30,10 @@ FETCH_TIMEOUT = 10.0  # seconds
 class AdviceRecord:
     """Structured bin advice for a single (item_category, council_slug) pair."""
 
-    bin_colour: str           # "red" | "yellow" | "green" | "blue" | "purple" | "special"
-    bin_name: str             # e.g. "General Waste", "Recycling"
-    prep_instructions: str    # e.g. "Rinse, remove lid, flatten" or ""
-    disposal_method: str      # "kerbside" | "special_disposal" | "drop_off"
+    bin_colour: str  # "red" | "yellow" | "green" | "blue" | "purple" | "special"
+    bin_name: str  # e.g. "General Waste", "Recycling"
+    prep_instructions: str  # e.g. "Rinse, remove lid, flatten" or ""
+    disposal_method: str  # "kerbside" | "special_disposal" | "drop_off"
     special_disposal_flag: bool
     notes: str
     is_fallback: bool
@@ -98,7 +99,11 @@ class GuidelinesService:
     def __init__(self) -> None:
         self._cache: dict[tuple[str, str], tuple[AdviceRecord, float]] = {}
         self._ttl = settings.guidelines_cache_ttl_seconds
-        self._openai = AsyncOpenAI(api_key=settings.openai_api_key) if settings.openai_api_key else None
+        self._openai = (
+            AsyncOpenAI(api_key=settings.openai_api_key)
+            if settings.openai_api_key
+            else None
+        )
         self._label_to_rny: dict[str, dict] = self._load_mapping()
 
     def _load_mapping(self) -> dict[str, dict]:
@@ -144,7 +149,9 @@ class GuidelinesService:
             Response text on success, None on HTTP error or network failure.
         """
         try:
-            async with httpx.AsyncClient(headers=SCRAPE_HEADERS, timeout=FETCH_TIMEOUT) as client:
+            async with httpx.AsyncClient(
+                headers=SCRAPE_HEADERS, timeout=FETCH_TIMEOUT
+            ) as client:
                 resp = await client.get(url, follow_redirects=True)
                 if resp.status_code == 200:
                     return resp.text
@@ -176,7 +183,9 @@ class GuidelinesService:
                 item_category,
                 council_slug,
             )
-            return replace(_FALLBACK, council_slug=council_slug, item_category=item_category)
+            return replace(
+                _FALLBACK, council_slug=council_slug, item_category=item_category
+            )
 
         if page_html:
             # Truncate HTML to ~8000 chars to stay within context budget for gpt-4o-mini
@@ -222,8 +231,12 @@ class GuidelinesService:
                 item_category=item_category,
             )
         except Exception as exc:
-            logger.error("OpenAI call failed for %s/%s: %s", item_category, council_slug, exc)
-            return replace(_FALLBACK, council_slug=council_slug, item_category=item_category)
+            logger.error(
+                "OpenAI call failed for %s/%s: %s", item_category, council_slug, exc
+            )
+            return replace(
+                _FALLBACK, council_slug=council_slug, item_category=item_category
+            )
 
     async def lookup(self, item_category: str, council_slug: str) -> AdviceRecord:
         """Return bin advice for (item_category, council_slug).

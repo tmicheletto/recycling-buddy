@@ -4,6 +4,7 @@ The GuidelinesService is mocked on app.state to avoid real OpenAI calls.
 Follows the same pattern as test_predict_endpoint.py: inject mock on app.state
 before creating the TestClient (no context manager — avoids lifespan startup).
 """
+
 import dataclasses
 from unittest.mock import AsyncMock, MagicMock
 
@@ -122,7 +123,9 @@ def client_with_fallback() -> TestClient:
 # ---------------------------------------------------------------------------
 
 
-def test_advice_returns_200_with_valid_params(client_with_mock_guidelines: TestClient) -> None:
+def test_advice_returns_200_with_valid_params(
+    client_with_mock_guidelines: TestClient,
+) -> None:
     """GET /advice with valid query params must return 200 with all required fields."""
     response = client_with_mock_guidelines.get(
         "/advice?item_category=cardboard&council_slug=SydneyNSW"
@@ -150,7 +153,9 @@ def test_advice_returns_200_with_valid_params(client_with_mock_guidelines: TestC
 # ---------------------------------------------------------------------------
 
 
-def test_advice_missing_item_category_returns_422(client_with_mock_guidelines: TestClient) -> None:
+def test_advice_missing_item_category_returns_422(
+    client_with_mock_guidelines: TestClient,
+) -> None:
     """GET /advice without item_category must return 422."""
     response = client_with_mock_guidelines.get("/advice?council_slug=SydneyNSW")
     assert response.status_code == 422
@@ -161,7 +166,9 @@ def test_advice_missing_item_category_returns_422(client_with_mock_guidelines: T
 # ---------------------------------------------------------------------------
 
 
-def test_advice_missing_council_slug_returns_422(client_with_mock_guidelines: TestClient) -> None:
+def test_advice_missing_council_slug_returns_422(
+    client_with_mock_guidelines: TestClient,
+) -> None:
     """GET /advice without council_slug must return 422."""
     response = client_with_mock_guidelines.get("/advice?item_category=cardboard")
     assert response.status_code == 422
@@ -220,4 +227,6 @@ def test_advice_response_schema_matches_advice_record_fields(
     body = response.json()
     advice_record_fields = {f.name for f in dataclasses.fields(AdviceRecord)}
     for field_name in advice_record_fields:
-        assert field_name in body, f"AdviceRecord field {field_name!r} missing from /advice response"
+        assert field_name in body, (
+            f"AdviceRecord field {field_name!r} missing from /advice response"
+        )

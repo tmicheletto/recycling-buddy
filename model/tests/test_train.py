@@ -5,6 +5,7 @@ Uses tiny synthetic datasets — no S3 access required.
 """
 
 from pathlib import Path
+from typing import cast
 
 import torch
 import torch.nn as nn
@@ -41,14 +42,15 @@ def test_build_model_returns_nn_module() -> None:
 def test_build_model_classifier_head_shape() -> None:
     model = build_model(num_classes=67)
     # EfficientNet-B0 classifier is Sequential; index 1 is the Linear layer
-    head = model.classifier[1]
+    head = cast(nn.Sequential, model.classifier)[1]
     assert isinstance(head, nn.Linear)
     assert head.out_features == 67
 
 
 def test_build_model_custom_num_classes() -> None:
     model = build_model(num_classes=10)
-    assert model.classifier[1].out_features == 10
+    head = cast(nn.Sequential, model.classifier)[1]
+    assert isinstance(head, nn.Linear) and head.out_features == 10
 
 
 # ---------------------------------------------------------------------------

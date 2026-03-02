@@ -63,9 +63,9 @@ def test_get_splits_indices_sum_to_total(dataset: WasteDataset) -> None:
 
 def test_get_splits_no_index_overlap(dataset: WasteDataset) -> None:
     train, val, test = dataset.get_splits(seed=0)
-    train_idx = set(train.indices)  # type: ignore[attr-defined]
-    val_idx = set(val.indices)  # type: ignore[attr-defined]
-    test_idx = set(test.indices)  # type: ignore[attr-defined]
+    train_idx = set(train.indices)
+    val_idx = set(val.indices)
+    test_idx = set(test.indices)
     assert train_idx.isdisjoint(val_idx)
     assert train_idx.isdisjoint(test_idx)
     assert val_idx.isdisjoint(test_idx)

@@ -9,7 +9,7 @@ from typing import Optional
 
 import boto3
 from botocore.exceptions import ClientError
-from torch.utils.data import Dataset
+from torch.utils.data import Subset
 from torchvision.datasets import ImageFolder
 
 from recbuddy.transforms import inference_transform, training_transform
@@ -77,7 +77,7 @@ class WasteDataset:
         val_frac: float = 0.15,
         test_frac: float = 0.15,
         seed: int = 42,
-    ) -> tuple[Dataset, Dataset, Dataset]:
+    ) -> tuple[Subset, Subset, Subset]:
         """Return (train, val, test) datasets derived from the downloaded images.
 
         Args:
@@ -117,7 +117,7 @@ class WasteDataset:
         )
 
         # Override transform on training subset to use augmented pipeline
-        train_ds.dataset = ImageFolder(  # type: ignore[attr-defined]
+        train_ds.dataset = ImageFolder(
             root=str(self.data_dir),
             transform=training_transform(),
         )

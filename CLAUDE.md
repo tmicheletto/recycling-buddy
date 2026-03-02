@@ -20,28 +20,6 @@ make logs         # Stream logs
 make init-localstack  # Initialize LocalStack S3 bucket
 ```
 
-### API (`cd api`)
-```bash
-uv run pytest                          # Run all tests
-uv run pytest tests/test_inference.py  # Run a single test file
-uv run ruff check .                    # Lint
-uv run ruff format .                   # Format
-```
-
-### Model (`cd model`)
-```bash
-uv run pytest
-uv run python -m recbuddy.train --s3-bucket recycling-buddy-training --output-dir artifacts/ --epochs 30 --seed 42
-uv run python -m recbuddy.evaluate --artifact artifacts/efficientnet_b0_recycling_v1.safetensors --s3-bucket recycling-buddy-training --split test
-```
-
-### UI (`cd ui`)
-```bash
-npm run dev      # Dev server at http://localhost:5173
-npm run build
-npm run lint
-```
-
 ## Architecture
 
 ### Layer interactions
