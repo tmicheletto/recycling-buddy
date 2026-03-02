@@ -12,7 +12,7 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from torchvision.datasets import ImageFolder
 
-from src.evaluate import compute_metrics, load_artifact
+from recbuddy.evaluate import compute_metrics, load_artifact
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -86,7 +86,7 @@ def test_load_artifact_raises_on_missing_file(tmp_path: Path) -> None:
 @pytest.fixture
 def dataset_and_loader(tmp_path: Path):
     data_dir = _make_tiny_dataset(tmp_path, n_classes=NUM_CLASSES, n_per_class=4)
-    from src.transforms import inference_transform
+    from recbuddy.transforms import inference_transform
 
     ds = ImageFolder(root=str(data_dir), transform=inference_transform())
     loader = DataLoader(ds, batch_size=4, shuffle=False)

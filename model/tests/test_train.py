@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 from PIL import Image
 
-from src.train import build_model, freeze_backbone, get_optimizer, train_one_epoch
+from recbuddy.train import build_model, freeze_backbone, get_optimizer, train_one_epoch
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -104,7 +104,7 @@ def test_train_one_epoch_returns_float_loss(tmp_path: Path) -> None:
     from torch.utils.data import DataLoader
     from torchvision.datasets import ImageFolder
 
-    from src.transforms import training_transform
+    from recbuddy.transforms import training_transform
 
     dataset = ImageFolder(root=str(data_dir), transform=training_transform())
     loader = DataLoader(dataset, batch_size=2, shuffle=True)

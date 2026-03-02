@@ -10,7 +10,7 @@ from unittest.mock import MagicMock
 import pytest
 from PIL import Image
 
-from src.dataset import WasteDataset
+from recbuddy.dataset import WasteDataset
 
 # ---------------------------------------------------------------------------
 # Helpers
