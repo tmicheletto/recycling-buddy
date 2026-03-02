@@ -11,8 +11,8 @@ import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 
-from src.inference import CategoryPrediction, ClassificationResult
-from src.main import app
+from app.inference import CategoryPrediction, ClassificationResult
+from app.main import app
 
 # ---------------------------------------------------------------------------
 # Fixtures

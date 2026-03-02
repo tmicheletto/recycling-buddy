@@ -10,9 +10,9 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from fastapi.testclient import TestClient
 
-from src.guidelines import AdviceRecord
-from src.inference import CategoryPrediction, ClassificationResult
-from src.main import app
+from app.guidelines import AdviceRecord
+from app.inference import CategoryPrediction, ClassificationResult
+from app.main import app
 
 # ---------------------------------------------------------------------------
 # Shared mock advice records

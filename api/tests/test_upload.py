@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
-from src.main import app
+from app.main import app
 
 client = TestClient(app)
 
@@ -20,7 +20,7 @@ def test_upload_valid_jpeg():
     image_data = JPEG_HEADER + b"\x00" * 100
     encoded = base64.b64encode(image_data).decode()
 
-    with patch("src.main.s3_service.upload_training_image") as mock_upload:
+    with patch("app.main.s3_service.upload_training_image") as mock_upload:
         mock_upload.return_value = "metal-cans-tins/test-key.jpeg"
 
         response = client.post(
@@ -41,7 +41,7 @@ def test_upload_valid_png():
     image_data = PNG_HEADER + b"\x00" * 100
     encoded = base64.b64encode(image_data).decode()
 
-    with patch("src.main.s3_service.upload_training_image") as mock_upload:
+    with patch("app.main.s3_service.upload_training_image") as mock_upload:
         mock_upload.return_value = "glass-bottles-jars/test-key.png"
 
         response = client.post(
@@ -111,7 +111,7 @@ def test_upload_s3_error():
     image_data = JPEG_HEADER + b"\x00" * 100
     encoded = base64.b64encode(image_data).decode()
 
-    with patch("src.main.s3_service.upload_training_image") as mock_upload:
+    with patch("app.main.s3_service.upload_training_image") as mock_upload:
         mock_upload.side_effect = Exception("S3 connection failed")
 
         response = client.post(

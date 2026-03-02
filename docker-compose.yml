@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./api/src:/app/src
+      - ./api/app:/app/app
       - ./model:/app/model
       - ./data:/app/data
     environment:
@@ -19,7 +19,7 @@ services:
       - AWS_SECRET_ACCESS_KEY=test
       - AWS_REGION=us-east-1
       - GUIDELINES_DATA_PATH=/app/data/label_to_rny.json
-    command: uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       model:
         condition: service_started

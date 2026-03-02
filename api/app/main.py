@@ -14,11 +14,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 from starlette.concurrency import run_in_threadpool
 
-from src.config import settings
-from src.guidelines import AdviceRecord, GuidelinesService
-from src.inference import ClassificationModel
-from src.labels import ALL_LABELS, ALL_LABELS_LIST
-from src.services.s3 import S3Service
+from app.config import settings
+from app.guidelines import AdviceRecord, GuidelinesService
+from app.inference import ClassificationModel
+from app.labels import ALL_LABELS, ALL_LABELS_LIST
+from app.services.s3 import S3Service
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

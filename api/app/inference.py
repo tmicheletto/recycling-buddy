@@ -23,7 +23,7 @@ from PIL import Image, UnidentifiedImageError
 from safetensors.torch import load_file
 from torchvision.transforms import v2 as T
 
-from src.labels import ALL_LABELS_LIST
+from app.labels import ALL_LABELS_LIST
 
 logger = logging.getLogger(__name__)
 

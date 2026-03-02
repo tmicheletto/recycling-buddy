@@ -4,8 +4,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from src.guidelines import AdviceRecord, GuidelinesService
-from src.labels import ALL_LABELS_LIST
+from app.guidelines import AdviceRecord, GuidelinesService
+from app.labels import ALL_LABELS_LIST
 
 pytestmark = pytest.mark.asyncio
 
@@ -50,7 +50,7 @@ def _make_advice_record(
 async def test_fallback_no_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
     """GuidelinesService with no API key returns a fallback AdviceRecord."""
     # Ensure no API key in settings
-    monkeypatch.setattr("src.guidelines.settings", _settings_with_no_key())
+    monkeypatch.setattr("app.guidelines.settings", _settings_with_no_key())
     svc = GuidelinesService()
 
     result = await svc.lookup("cardboard", "SydneyNSW")
@@ -158,7 +158,7 @@ async def test_llm_response_parsed_correctly() -> None:
 
 async def test_fallback_record_fields_complete(monkeypatch: pytest.MonkeyPatch) -> None:
     """Fallback AdviceRecord must have all fields non-None and valid enum values."""
-    monkeypatch.setattr("src.guidelines.settings", _settings_with_no_key())
+    monkeypatch.setattr("app.guidelines.settings", _settings_with_no_key())
     svc = GuidelinesService()
 
     result = await svc.lookup("cardboard", "SydneyNSW")

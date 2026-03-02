@@ -45,7 +45,7 @@ jobs:
         working-directory: api
         run: uv run ruff check .
 
-      # TODO: Fix ty configuration for src-layout
+      # TODO: Fix ty configuration for app-layout
       # - name: Type check
       #   working-directory: api
       #   run: uv run ty check

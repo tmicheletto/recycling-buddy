@@ -13,8 +13,8 @@ import torchvision.models as models
 from PIL import Image
 from safetensors.torch import save_file
 
-from src.inference import CategoryPrediction, ClassificationModel, ClassificationResult
-from src.labels import ALL_LABELS_LIST
+from app.inference import CategoryPrediction, ClassificationModel, ClassificationResult
+from app.labels import ALL_LABELS_LIST
 
 
 # ---------------------------------------------------------------------------
