@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 
 from app.guidelines import AdviceRecord, GuidelinesService
-from app.labels import ALL_LABELS_LIST
+from recbuddy.labels import ALL_LABELS_LIST
 
 pytestmark = pytest.mark.asyncio
 

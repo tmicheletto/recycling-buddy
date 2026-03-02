@@ -2,7 +2,7 @@
 
 from fastapi.testclient import TestClient
 
-from app.labels import ALL_LABELS
+from recbuddy.labels import ALL_LABELS
 from app.main import app
 
 client = TestClient(app)

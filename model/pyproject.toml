@@ -49,3 +49,5 @@ select = ["E", "F", "I"]
 pythonpath = ["."]
 testpaths = ["tests"]
 
+[tool.ty.environment]
+python = ".venv/bin/python"

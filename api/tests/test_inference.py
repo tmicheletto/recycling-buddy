@@ -14,7 +14,7 @@ from PIL import Image
 from safetensors.torch import save_file
 
 from app.inference import CategoryPrediction, ClassificationModel, ClassificationResult
-from app.labels import ALL_LABELS_LIST
+from recbuddy.labels import ALL_LABELS_LIST
 
 
 # ---------------------------------------------------------------------------

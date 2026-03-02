@@ -18,7 +18,7 @@ from starlette.concurrency import run_in_threadpool
 from app.config import settings
 from app.guidelines import AdviceRecord, GuidelinesService
 from app.inference import ClassificationModel
-from app.labels import ALL_LABELS, ALL_LABELS_LIST
+from recbuddy.labels import ALL_LABELS, ALL_LABELS_LIST
 from app.services.s3 import S3Service
 
 # Configure logging
