@@ -7,12 +7,14 @@ on:
       - main
     paths:
       - 'api/**'
+      - 'model/**'
       - '.github/workflows/api-build-deploy.yml'
   pull_request:
     branches:
       - main
     paths:
       - 'api/**'
+      - 'model/**'
       - '.github/workflows/api-build-deploy.yml'
 
 env:

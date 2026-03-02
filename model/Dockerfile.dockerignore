@@ -1,0 +1,6 @@
+model/.venv
+model/.python-version
+model/artifacts/
+model/checkpoints/
+model/.pytest_cache/
+model/.ruff_cache/
