@@ -1,5 +1,5 @@
 [project]
-name = "recycling-model"
+name = "recbuddy"
 version = "0.1.0"
 description = "ML model training and evaluation for Recycling Buddy"
 readme = "README.md"
@@ -12,6 +12,10 @@ dependencies = [
     "boto3>=1.42.0",
     "numpy>=1.24.0",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
