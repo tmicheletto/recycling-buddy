@@ -2,6 +2,7 @@
 FastAPI application for Recycling Buddy
 """
 
+import asyncio
 import base64
 import json
 import logging
@@ -27,13 +28,9 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    """Load the classifier model at startup; release on shutdown."""
-    try:
-        app.state.model = ClassificationModel.from_artifact(settings.model_artifact_path)
-        logger.info("Model loaded and ready for inference")
-    except FileNotFoundError as exc:
-        logger.warning("Model artifact not found — /predict will return 503: %s", exc)
-        app.state.model = None
+    """Initialise app state; model is loaded lazily on first /predict request."""
+    app.state.model = None
+    app.state.model_lock = asyncio.Lock()
     app.state.guidelines_service = GuidelinesService()
     yield
 
@@ -156,10 +153,20 @@ async def predict(request: Request, file: UploadFile = File(...)) -> PredictionR
         PredictionResponse with top label, confidence, and top-3 categories.
     """
     if request.app.state.model is None:
-        raise HTTPException(
-            status_code=503,
-            detail="Model artifact not available. Run the training pipeline first.",
-        )
+        async with request.app.state.model_lock:
+            if request.app.state.model is None:
+                try:
+                    request.app.state.model = await run_in_threadpool(
+                        ClassificationModel.from_artifact,
+                        settings.model_artifact_path,
+                    )
+                    logger.info("Model loaded lazily on first /predict request")
+                except Exception as exc:
+                    logger.warning("Model failed to load: %s", exc)
+                    raise HTTPException(
+                        status_code=503,
+                        detail="Model artifact not available. Run the training pipeline first.",
+                    )
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File must be an image")
 
