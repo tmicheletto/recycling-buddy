@@ -22,7 +22,7 @@ dev = [
     "pytest>=9.0.0",
     "pytest-cov>=4.1.0",
     "ruff>=0.14.0",
-    "pyrefly>=0.19.0",
+    "ty",
 ]
 
 # Use CPU-only PyTorch wheels on Linux (Docker); macOS uses PyPI wheels (includes MPS support)
@@ -49,5 +49,3 @@ select = ["E", "F", "I"]
 pythonpath = ["."]
 testpaths = ["tests"]
 
-[tool.pyrefly]
-search_path = ["."]
