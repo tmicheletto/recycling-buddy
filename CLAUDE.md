@@ -63,15 +63,15 @@ The `model/` component is a training-only pipeline. Its output (a `.safetensors`
 
 ### API startup
 
-`api/src/main.py` uses a lifespan context manager to load `ClassificationModel` once on startup. If the artifact is missing, the app starts in a degraded state and `/predict` returns 503.
+`api/app/main.py` uses a lifespan context manager to load `ClassificationModel` once on startup. If the artifact is missing, the app starts in a degraded state and `/predict` returns 503.
 
-### Configuration (`api/src/config.py`)
+### Configuration (`api/app/config.py`)
 
 Pydantic `BaseSettings` reads from `config/.env.<ENVIRONMENT>` (e.g. `config/.env.dev`). The `ENVIRONMENT` env var (default: `DEV`) selects the file. `.env.local` is gitignored and used for machine-local overrides.
 
 Key settings: `model_artifact_path`, `guidelines_data_path`, `s3_endpoint_url`, `openai_api_key`, `cors_origins`.
 
-### Guidelines advice flow (`api/src/guidelines.py`)
+### Guidelines advice flow (`api/app/guidelines.py`)
 
 1. Look up `label_to_rny.json` (`data/label_to_rny.json`) for the classifier label → RNY slug + URL
 2. Fetch the council's RNY page HTML as grounding context
@@ -80,7 +80,7 @@ Key settings: `model_artifact_path`, `guidelines_data_path`, `s3_endpoint_url`, 
 
 ### Labels
 
-`api/src/labels.py` is the single source of truth for the 67 waste category labels. Labels are lowercase with hyphens (e.g. `glass-bottles-jars`). The `data/label_to_rny.json` maps each label to its Recycling Near You slug and URL.
+`api/app/labels.py` is the single source of truth for the 67 waste category labels. Labels are lowercase with hyphens (e.g. `glass-bottles-jars`). The `data/label_to_rny.json` maps each label to its Recycling Near You slug and URL.
 
 ### Local development
 

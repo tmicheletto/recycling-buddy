@@ -21,7 +21,7 @@ This component provides:
 
 ```
 api/
-├── src/
+├── app/
 │   ├── __init__.py
 │   ├── main.py          # FastAPI application
 │   ├── models.py        # Pydantic models (to be added)
@@ -43,7 +43,7 @@ pip install -r requirements.txt
 
 ```bash
 # Run locally
-uvicorn src.main:app --reload
+uvicorn app.main:app --reload
 
 # Run with Docker
 docker build -t recycling-buddy-api .
