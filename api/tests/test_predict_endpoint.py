@@ -4,8 +4,9 @@ Tests must FAIL before implementation exists (TDD — constitution Principle II)
 The model is injected via app.state to avoid loading a real artifact.
 """
 
+import asyncio
 import io
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -135,3 +136,43 @@ def test_predict_does_not_write_image_to_disk(
     )
     image_files = list(tmp_path.rglob("*.jpg")) + list(tmp_path.rglob("*.png"))
     assert len(image_files) == 0
+
+
+# ---------------------------------------------------------------------------
+# Lazy loading
+# ---------------------------------------------------------------------------
+
+
+def test_predict_returns_503_when_model_fails_to_load(valid_jpeg_bytes: bytes) -> None:
+    """503 is returned when the artifact can't be loaded on first /predict."""
+    app.state.model = None
+    app.state.model_lock = asyncio.Lock()
+    with patch(
+        "app.main.ClassificationModel.from_artifact",
+        side_effect=FileNotFoundError("no artifact"),
+    ):
+        client = TestClient(app)
+        response = client.post(
+            "/predict",
+            files={"file": ("photo.jpg", valid_jpeg_bytes, "image/jpeg")},
+        )
+    assert response.status_code == 503
+
+
+def test_predict_loads_model_lazily_on_first_request(
+    mock_model: MagicMock, valid_jpeg_bytes: bytes
+) -> None:
+    """Model is loaded from artifact and cached in app.state on first /predict."""
+    app.state.model = None
+    app.state.model_lock = asyncio.Lock()
+    with patch(
+        "app.main.ClassificationModel.from_artifact",
+        return_value=mock_model,
+    ):
+        client = TestClient(app)
+        response = client.post(
+            "/predict",
+            files={"file": ("photo.jpg", valid_jpeg_bytes, "image/jpeg")},
+        )
+    assert response.status_code == 200
+    assert app.state.model is mock_model
