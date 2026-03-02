@@ -89,7 +89,7 @@ async def test_cache_key_is_item_and_council() -> None:
     record_sydney = _make_advice_record(council_slug="SydneyNSW")
     record_melbourne = _make_advice_record(council_slug="MelbourneVIC")
 
-    def _side_effect(item_category: str, council_slug: str, page_html):  # type: ignore[override]
+    def _side_effect(item_category: str, council_slug: str, page_html):
         if council_slug == "SydneyNSW":
             return record_sydney
         return record_melbourne
