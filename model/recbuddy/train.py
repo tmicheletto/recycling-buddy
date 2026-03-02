@@ -5,10 +5,10 @@ Two-phase transfer learning on EfficientNet-B0:
   Phase 2 — Full fine-tune with differential LRs, SequentialLR warmup→cosine, Mixup
 
 Usage:
-    uv run python -m src.train \\
-        --s3-bucket recycling-buddy-training \\
-        --output-dir model/artifacts/ \\
-        --epochs 30 \\
+    uv run python -m recbuddy.train \
+        --s3-bucket recycling-buddy-data \
+        --output-dir model/artifacts/ \
+        --epochs 30 \
         --seed 42
 """
 
