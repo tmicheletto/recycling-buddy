@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
 # Copy recbuddy package (path dependency of the api)
 # Only the package source is needed — not the full model directory
 COPY model/pyproject.toml /model/pyproject.toml
+COPY model/README.md /model/README.md
 COPY model/recbuddy/ /model/recbuddy/
 
 # Copy api project files and install dependencies
