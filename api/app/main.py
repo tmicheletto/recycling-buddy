@@ -161,7 +161,7 @@ async def predict(request: Request, file: UploadFile = File(...)) -> PredictionR
                         settings.model_artifact_path,
                     )
                     logger.info("Model loaded lazily on first /predict request")
-                except Exception as exc:
+                except Exception:
                     logger.exception("Model failed to load")
                     raise HTTPException(
                         status_code=503,
