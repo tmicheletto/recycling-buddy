@@ -13,15 +13,18 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy project files
-COPY pyproject.toml .
-COPY uv.lock .
+# Copy recbuddy package (path dependency of the api)
+# Only the package source is needed — not the full model directory
+COPY model/pyproject.toml /model/pyproject.toml
+COPY model/recbuddy/ /model/recbuddy/
 
-# Install dependencies
+# Copy api project files and install dependencies
+COPY api/pyproject.toml .
+COPY api/uv.lock .
 RUN uv sync --frozen
 
-# Copy API code
-COPY . .
+# Copy remaining api source
+COPY api/ .
 
 # Expose port
 EXPOSE 8000
