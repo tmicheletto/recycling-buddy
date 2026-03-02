@@ -8,6 +8,8 @@ Recycling Buddy is a full-stack ML application that classifies waste items from 
 
 ## Commands
 
+**When working with Python, invoke the relevant /astral:<skill> for uv, ty, and ruff to ensure best practices are followed.**
+
 ### Top-level (from repo root)
 ```bash
 make run          # Start all services via Docker Compose
