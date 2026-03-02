@@ -143,10 +143,12 @@ def test_predict_does_not_write_image_to_disk(
 # ---------------------------------------------------------------------------
 
 
-def test_predict_returns_503_when_model_fails_to_load(valid_jpeg_bytes: bytes) -> None:
+def test_predict_returns_503_when_model_fails_to_load(
+    monkeypatch, valid_jpeg_bytes: bytes
+) -> None:
     """503 is returned when the artifact can't be loaded on first /predict."""
-    app.state.model = None
-    app.state.model_lock = asyncio.Lock()
+    monkeypatch.setattr(app.state, "model", None, raising=False)
+    monkeypatch.setattr(app.state, "model_lock", asyncio.Lock(), raising=False)
     with patch(
         "app.main.ClassificationModel.from_artifact",
         side_effect=FileNotFoundError("no artifact"),
@@ -160,11 +162,11 @@ def test_predict_returns_503_when_model_fails_to_load(valid_jpeg_bytes: bytes) -
 
 
 def test_predict_loads_model_lazily_on_first_request(
-    mock_model: MagicMock, valid_jpeg_bytes: bytes
+    monkeypatch, mock_model: MagicMock, valid_jpeg_bytes: bytes
 ) -> None:
     """Model is loaded from artifact and cached in app.state on first /predict."""
-    app.state.model = None
-    app.state.model_lock = asyncio.Lock()
+    monkeypatch.setattr(app.state, "model", None, raising=False)
+    monkeypatch.setattr(app.state, "model_lock", asyncio.Lock(), raising=False)
     with patch(
         "app.main.ClassificationModel.from_artifact",
         return_value=mock_model,
