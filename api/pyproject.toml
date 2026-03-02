@@ -5,6 +5,7 @@ description = "FastAPI backend for Recycling Buddy"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "recbuddy",
     "boto3>=1.42.38",
     "fastapi>=0.128.0",
     "openai>=2.24.0",
@@ -19,6 +20,7 @@ dependencies = [
 
 # Use CPU-only PyTorch wheels on Linux (Docker); macOS uses PyPI wheels (includes MPS)
 [tool.uv.sources]
+recbuddy = { path = "../model" }
 torch = [
     { index = "pytorch-cpu", marker = "sys_platform == 'linux'" },
 ]
