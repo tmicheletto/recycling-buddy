@@ -162,7 +162,7 @@ async def predict(request: Request, file: UploadFile = File(...)) -> PredictionR
                     )
                     logger.info("Model loaded lazily on first /predict request")
                 except Exception as exc:
-                    logger.warning("Model failed to load: %s", exc)
+                    logger.exception("Model failed to load")
                     raise HTTPException(
                         status_code=503,
                         detail="Model artifact not available. Run the training pipeline first.",
