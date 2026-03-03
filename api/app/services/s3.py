@@ -84,7 +84,9 @@ class S3Service:
         """
         effective_bucket = bucket or self.bucket
         Path(local_path).parent.mkdir(parents=True, exist_ok=True)
-        logger.info("Downloading s3://%s/%s to %s", effective_bucket, s3_key, local_path)
+        logger.info(
+            "Downloading s3://%s/%s to %s", effective_bucket, s3_key, local_path
+        )
         self.client.download_file(effective_bucket, s3_key, local_path)
         logger.info("Download complete: %s", local_path)
 

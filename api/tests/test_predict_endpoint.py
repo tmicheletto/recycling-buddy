@@ -192,9 +192,12 @@ def test_predict_downloads_artifact_when_path_is_s3_uri(
         "model_artifact_path",
         "s3://recycling-buddy-data/artifacts/efficientnet_b0_recycling_latest.safetensors",
     )
-    with patch("app.main.s3_service.download_artifact") as mock_download, patch(
-        "app.main.ClassificationModel.from_artifact", return_value=mock_model
-    ) as mock_from_artifact:
+    with (
+        patch("app.main.s3_service.download_artifact") as mock_download,
+        patch(
+            "app.main.ClassificationModel.from_artifact", return_value=mock_model
+        ) as mock_from_artifact,
+    ):
         client = TestClient(app)
         response = client.post(
             "/predict",
@@ -215,9 +218,12 @@ def test_predict_does_not_download_when_path_is_local(
     """When MODEL_ARTIFACT_PATH is a local path, no S3 download is attempted."""
     monkeypatch.setattr(app.state, "model", None, raising=False)
     monkeypatch.setattr(app.state, "model_lock", asyncio.Lock(), raising=False)
-    monkeypatch.setattr(settings, "model_artifact_path", "/some/local/model.safetensors")
-    with patch("app.main.s3_service.download_artifact") as mock_download, patch(
-        "app.main.ClassificationModel.from_artifact", return_value=mock_model
+    monkeypatch.setattr(
+        settings, "model_artifact_path", "/some/local/model.safetensors"
+    )
+    with (
+        patch("app.main.s3_service.download_artifact") as mock_download,
+        patch("app.main.ClassificationModel.from_artifact", return_value=mock_model),
     ):
         client = TestClient(app)
         response = client.post(
