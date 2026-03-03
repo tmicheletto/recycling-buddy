@@ -6,6 +6,7 @@ The model is injected via app.state to avoid loading a real artifact.
 
 import asyncio
 import io
+import logging
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -232,3 +233,27 @@ def test_predict_does_not_download_when_path_is_local(
         )
     assert response.status_code == 200
     mock_download.assert_not_called()
+
+
+def test_predict_logs_model_version_on_load(
+    monkeypatch, mock_model: MagicMock, valid_jpeg_bytes: bytes, caplog
+) -> None:
+    """Model version from artifact path is logged on first load."""
+    monkeypatch.setattr(app.state, "model", None, raising=False)
+    monkeypatch.setattr(app.state, "model_lock", asyncio.Lock(), raising=False)
+    monkeypatch.setattr(
+        settings,
+        "model_artifact_path",
+        "s3://recycling-buddy-data/artifacts/0.2.0/model.safetensors",
+    )
+    with (
+        patch("app.main.s3_service.download_artifact"),
+        patch("app.main.ClassificationModel.from_artifact", return_value=mock_model),
+        caplog.at_level(logging.INFO),
+    ):
+        client = TestClient(app)
+        client.post(
+            "/predict",
+            files={"file": ("photo.jpg", valid_jpeg_bytes, "image/jpeg")},
+        )
+    assert any("0.2.0" in record.message for record in caplog.records)

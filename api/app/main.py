@@ -86,6 +86,20 @@ def _resolve_artifact_path(path: str) -> str:
     return local_path
 
 
+def _extract_model_version(path: str) -> str:
+    """Extract model version from artifact path.
+
+    Expects paths like ``artifacts/0.2.0/model.safetensors`` or
+    ``s3://bucket/artifacts/0.2.0/model.safetensors``.
+    Falls back to ``"unknown"`` if version cannot be parsed.
+    """
+    parts = path.replace("\\", "/").split("/")
+    for i, part in enumerate(parts):
+        if part == "artifacts" and i + 1 < len(parts) - 1:
+            return parts[i + 1]
+    return "unknown"
+
+
 # Response models
 class HealthResponse(BaseModel):
     """Health check response."""
@@ -188,7 +202,10 @@ async def predict(request: Request, file: UploadFile = File(...)) -> PredictionR
                         ClassificationModel.from_artifact,
                         artifact_path,
                     )
-                    logger.info("Model loaded lazily on first /predict request")
+                    logger.info(
+                        "Model loaded (version: %s)",
+                        _extract_model_version(settings.model_artifact_path),
+                    )
                 except Exception:
                     logger.exception("Model failed to load")
                     raise HTTPException(
