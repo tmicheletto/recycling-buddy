@@ -14,8 +14,6 @@ from torchvision.datasets import ImageFolder
 
 from recbuddy.transforms import inference_transform, training_transform
 
-DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent.parent / "data"
-
 
 class WasteDataset:
     """Downloads labeled waste images from S3 and provides train/val/test splits.
@@ -35,14 +33,14 @@ class WasteDataset:
     def __init__(
         self,
         s3_bucket: str,
-        data_dir: Path = DEFAULT_DATA_DIR,
+        data_dir: str = "data",
         endpoint_url: Optional[str] = None,
         aws_access_key_id: Optional[str] = None,
         aws_secret_access_key: Optional[str] = None,
         region_name: str = "us-east-1",
     ) -> None:
         self.s3_bucket = s3_bucket
-        self.data_dir = data_dir
+        self.data_dir = Path(data_dir)
         self._s3 = boto3.client(
             "s3",
             endpoint_url=endpoint_url,
