@@ -5,9 +5,6 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /app
 
-# Data directory expected at /app/data — mount a volume or set GUIDELINES_DATA_PATH env var
-ENV GUIDELINES_DATA_PATH=/app/data/label_to_rny.json
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \

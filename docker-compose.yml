@@ -8,7 +8,6 @@ services:
     volumes:
       - ./api/app:/app/app
       - ./model:/app/model
-      - ./data:/app/data
     environment:
       - PYTHONUNBUFFERED=1
       - MODEL_ARTIFACT_PATH=/app/model/artifacts/model.safetensors
@@ -18,7 +17,6 @@ services:
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
       - AWS_REGION=us-east-1
-      - GUIDELINES_DATA_PATH=/app/data/label_to_rny.json
     command: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       model:
