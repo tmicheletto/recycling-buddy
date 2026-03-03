@@ -1,11 +1,8 @@
 """Configuration settings for the API."""
 
 import os
-import pathlib
 
 from pydantic_settings import BaseSettings
-
-_PROJECT_ROOT = pathlib.Path(__file__).parent.parent.parent
 
 
 class Settings(BaseSettings):
@@ -19,8 +16,9 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173"
     model_artifact_path: str = "model/artifacts/model.safetensors"
     openai_api_key: str | None = None
-    guidelines_data_path: str = str(_PROJECT_ROOT / "data" / "label_to_rny.json")
+    tavily_api_key: str | None = None
     guidelines_cache_ttl_seconds: int = 604800  # 1 week
+    search_cache_ttl_seconds: int = 86400  # 24 hours
 
     model_config = {
         "env_file": f"config/.env.{os.getenv('ENVIRONMENT', 'DEV').lower()}",
