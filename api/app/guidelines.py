@@ -10,12 +10,18 @@ import logging
 import time
 from dataclasses import dataclass, replace
 
+from asyncio import get_running_loop
+from functools import partial
+
 from openai import AsyncOpenAI
 from tavily import TavilyClient
 
 from app.config import settings
 
 logger = logging.getLogger(__name__)
+
+_VALID_BIN_COLOURS = {"red", "yellow", "green", "blue", "purple", "special"}
+_VALID_DISPOSAL_METHODS = {"kerbside", "special_disposal", "drop_off"}
 
 
 @dataclass(frozen=True)
@@ -219,11 +225,17 @@ class GuidelinesService:
             )
             raw = response.choices[0].message.content or "{}"
             data = json.loads(raw)
+            bin_colour = data.get("bin_colour", "red")
+            if bin_colour not in _VALID_BIN_COLOURS:
+                bin_colour = "red"
+            disposal_method = data.get("disposal_method", "kerbside")
+            if disposal_method not in _VALID_DISPOSAL_METHODS:
+                disposal_method = "kerbside"
             return AdviceRecord(
-                bin_colour=data.get("bin_colour", "red"),
+                bin_colour=bin_colour,
                 bin_name=data.get("bin_name", "General Waste"),
                 prep_instructions=data.get("prep_instructions", ""),
-                disposal_method=data.get("disposal_method", "kerbside"),
+                disposal_method=disposal_method,
                 special_disposal_flag=bool(data.get("special_disposal_flag", False)),
                 notes=data.get("notes", ""),
                 is_fallback=bool(data.get("is_fallback", False)),
@@ -264,7 +276,12 @@ class GuidelinesService:
             del self._advice_cache[cache_key]
 
         # Tier 2: search cache (or fresh Tavily call)
-        search_content = self._search_rny(item_category, council_slug)
+        # _search_rny uses the synchronous Tavily client, so run in a thread
+        # to avoid blocking the event loop.
+        loop = get_running_loop()
+        search_content = await loop.run_in_executor(
+            None, partial(self._search_rny, item_category, council_slug)
+        )
 
         record = await self._call_llm(item_category, council_slug, search_content)
         self._advice_cache[cache_key] = (record, time.time())
