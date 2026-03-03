@@ -66,6 +66,10 @@ build/
 # Docker
 *.log
 
+# Training data
+data/
+model/data/
+
 # LocalStack
 localstack-data/
 
