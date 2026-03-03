@@ -3,6 +3,7 @@
 import logging
 import uuid
 from datetime import datetime, timezone
+from pathlib import Path
 
 import boto3
 
@@ -70,6 +71,18 @@ class S3Service:
             metadata.get("RequestId"),
         )
         return key
+
+    def download_artifact(self, s3_key: str, local_path: str) -> None:
+        """Download a model artifact from S3 to a local path.
+
+        Args:
+            s3_key: S3 object key to download.
+            local_path: Local filesystem path to write to.
+        """
+        Path(local_path).parent.mkdir(parents=True, exist_ok=True)
+        logger.info("Downloading s3://%s/%s to %s", self.bucket, s3_key, local_path)
+        self.client.download_file(self.bucket, s3_key, local_path)
+        logger.info("Download complete: %s", local_path)
 
     def _detect_extension(self, data: bytes) -> str:
         """Detect image format from magic bytes.

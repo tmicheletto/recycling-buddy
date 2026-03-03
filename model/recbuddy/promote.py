@@ -72,10 +72,11 @@ def promote(
 
     # Derive version from filename, e.g. efficientnet_b0_recycling_v2 -> "v2"
     stem = artifact.stem
-    version = stem.rsplit("_v", 1)[-1] if "_v" in stem else stem
+    raw = stem.rsplit("_v", 1)[-1] if "_v" in stem else stem
+    version = f"v{raw}" if raw.isdigit() else raw
 
     manifest = {
-        "version": f"v{version}",
+        "version": version,
         "artifact_key": versioned_key,
         "latest_key": _LATEST_KEY,
         "promoted_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
