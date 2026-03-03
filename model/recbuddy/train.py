@@ -394,7 +394,6 @@ def _evaluate(model: nn.Module, loader: DataLoader, num_classes: int) -> float:
     return correct / max(total, 1)
 
 
-
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
