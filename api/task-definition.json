@@ -31,7 +31,7 @@
         },
         {
           "name": "MODEL_ARTIFACT_PATH",
-          "value": "s3://recycling-buddy-data/artifacts/efficientnet_b0_recycling_latest.safetensors"
+          "value": "s3://recycling-buddy-data/artifacts/0.1.0/model.safetensors"
         }
       ],
       "logConfiguration": {

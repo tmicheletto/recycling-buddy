@@ -17,9 +17,7 @@ class Settings(BaseSettings):
     aws_access_key_id: str | None = None
     aws_secret_access_key: str | None = None
     cors_origins: str = "http://localhost:5173"
-    model_artifact_path: str = (
-        "model/artifacts/efficientnet_b0_recycling_v1.safetensors"
-    )
+    model_artifact_path: str = "model/artifacts/model.safetensors"
     openai_api_key: str | None = None
     guidelines_data_path: str = str(_PROJECT_ROOT / "data" / "label_to_rny.json")
     guidelines_cache_ttl_seconds: int = 604800  # 1 week
