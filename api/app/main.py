@@ -82,7 +82,7 @@ def _resolve_artifact_path(path: str) -> str:
     if not sep or not key:
         raise ValueError(f"Invalid S3 URI — missing object key: {path!r}")
     local_path = "/tmp/model.safetensors"
-    s3_service.download_artifact(key, local_path)
+    s3_service.download_artifact(key, local_path, bucket=_bucket)
     return local_path
 
 

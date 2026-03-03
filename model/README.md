@@ -37,7 +37,7 @@ uv sync
 Run via Docker Compose (recommended):
 
 ```bash
-docker-compose run model uv run python -m src.train \
+docker-compose run model uv run python -m recbuddy.train \
     --s3-bucket recycling-buddy-training \
     --output-dir model/artifacts/ \
     --epochs 30 \
@@ -49,7 +49,7 @@ Or locally against LocalStack:
 ```bash
 cd model
 AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test \
-uv run python -m src.train \
+uv run python -m recbuddy.train \
     --s3-bucket recycling-buddy-training \
     --s3-endpoint-url http://localhost:4566 \
     --output-dir artifacts/ \
@@ -65,7 +65,7 @@ Checkpoints are saved to `model/checkpoints/` after each epoch. The final artifa
 To resume from a checkpoint:
 
 ```bash
-uv run python -m src.train \
+uv run python -m recbuddy.train \
     --s3-bucket recycling-buddy-training \
     --resume model/checkpoints/checkpoint_epoch_010.safetensors \
     --output-dir artifacts/ \
@@ -76,7 +76,7 @@ uv run python -m src.train \
 
 ```bash
 cd model
-uv run python -m src.evaluate \
+uv run python -m recbuddy.evaluate \
     --artifact artifacts/efficientnet_b0_recycling_v1.safetensors \
     --s3-bucket recycling-buddy-training \
     --split test

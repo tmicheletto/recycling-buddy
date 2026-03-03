@@ -72,16 +72,20 @@ class S3Service:
         )
         return key
 
-    def download_artifact(self, s3_key: str, local_path: str) -> None:
+    def download_artifact(
+        self, s3_key: str, local_path: str, bucket: str | None = None
+    ) -> None:
         """Download a model artifact from S3 to a local path.
 
         Args:
             s3_key: S3 object key to download.
             local_path: Local filesystem path to write to.
+            bucket: S3 bucket name. Defaults to ``self.bucket``.
         """
+        effective_bucket = bucket or self.bucket
         Path(local_path).parent.mkdir(parents=True, exist_ok=True)
-        logger.info("Downloading s3://%s/%s to %s", self.bucket, s3_key, local_path)
-        self.client.download_file(self.bucket, s3_key, local_path)
+        logger.info("Downloading s3://%s/%s to %s", effective_bucket, s3_key, local_path)
+        self.client.download_file(effective_bucket, s3_key, local_path)
         logger.info("Download complete: %s", local_path)
 
     def _detect_extension(self, data: bytes) -> str:

@@ -204,6 +204,7 @@ def test_predict_downloads_artifact_when_path_is_s3_uri(
     mock_download.assert_called_once_with(
         "artifacts/efficientnet_b0_recycling_latest.safetensors",
         "/tmp/model.safetensors",
+        bucket="recycling-buddy-data",
     )
     mock_from_artifact.assert_called_once_with("/tmp/model.safetensors")
 
