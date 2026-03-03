@@ -54,6 +54,7 @@ def test_promote_writes_manifest(tmp_path: Path) -> None:
     assert manifest["version"] == "v2"
     assert "promoted_at" in manifest
     assert "artifact_key" in manifest
+    assert manifest["latest_key"] == _LATEST_KEY
 
 
 def test_promote_returns_latest_key(tmp_path: Path) -> None:
