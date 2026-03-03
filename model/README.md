@@ -102,6 +102,31 @@ Outputs a JSON report to stdout:
 
 Categories with top-1 accuracy below 60% are flagged to stderr.
 
+## Promotion
+
+After evaluating a satisfactory artifact, promote it to S3:
+
+```bash
+cd model
+make promote ARTIFACT=artifacts/efficientnet_b0_recycling_v1.safetensors
+```
+
+Or directly:
+
+```bash
+uv run python -m recbuddy.promote \
+    --artifact artifacts/efficientnet_b0_recycling_v1.safetensors \
+    --s3-bucket recycling-buddy-data
+```
+
+This uploads the artifact to two S3 keys:
+- `artifacts/efficientnet_b0_recycling_latest.safetensors` — the stable key the API uses
+- `artifacts/efficientnet_b0_recycling_v{N}.safetensors` — versioned copy for history
+
+It also writes `artifacts/latest.json` with version and timestamp metadata.
+
+The next ECS deploy will pick up the new artifact automatically on first `/predict` request.
+
 ## Tests
 
 ```bash

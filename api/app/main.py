@@ -77,7 +77,7 @@ def _resolve_artifact_path(path: str) -> str:
     """
     if not path.startswith("s3://"):
         return path
-    without_scheme = path[len("s3://"):]
+    without_scheme = path[len("s3://") :]
     _bucket, sep, key = without_scheme.partition("/")
     if not sep or not key:
         raise ValueError(f"Invalid S3 URI — missing object key: {path!r}")
