@@ -351,8 +351,7 @@ def train(
     # Save final artifact
     # -------------------------------------------------------------------
     output_dir.mkdir(parents=True, exist_ok=True)
-    version = _next_version(output_dir)
-    artifact_path = output_dir / f"efficientnet_b0_recycling_v{version}.safetensors"
+    artifact_path = output_dir / "model.safetensors"
     save_file(model.state_dict(), str(artifact_path))
     logger.info("Artifact saved: %s", artifact_path)
 
@@ -394,20 +393,6 @@ def _evaluate(model: nn.Module, loader: DataLoader, num_classes: int) -> float:
             total += labels.size(0)
     return correct / max(total, 1)
 
-
-def _next_version(output_dir: Path) -> int:
-    """Return the next artifact version number (1-based)."""
-    existing = list(output_dir.glob("efficientnet_b0_recycling_v*.safetensors"))
-    if not existing:
-        return 1
-    versions = []
-    for p in existing:
-        stem = p.stem  # e.g. efficientnet_b0_recycling_v3
-        try:
-            versions.append(int(stem.rsplit("v", 1)[-1]))
-        except ValueError:
-            pass
-    return max(versions, default=0) + 1
 
 
 # ---------------------------------------------------------------------------
