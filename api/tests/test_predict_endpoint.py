@@ -194,7 +194,7 @@ def test_predict_downloads_artifact_when_path_is_s3_uri(
     )
     with patch("app.main.s3_service.download_artifact") as mock_download, patch(
         "app.main.ClassificationModel.from_artifact", return_value=mock_model
-    ):
+    ) as mock_from_artifact:
         client = TestClient(app)
         response = client.post(
             "/predict",
@@ -205,6 +205,7 @@ def test_predict_downloads_artifact_when_path_is_s3_uri(
         "artifacts/efficientnet_b0_recycling_latest.safetensors",
         "/tmp/model.safetensors",
     )
+    mock_from_artifact.assert_called_once_with("/tmp/model.safetensors")
 
 
 def test_predict_does_not_download_when_path_is_local(
@@ -218,8 +219,9 @@ def test_predict_does_not_download_when_path_is_local(
         "app.main.ClassificationModel.from_artifact", return_value=mock_model
     ):
         client = TestClient(app)
-        client.post(
+        response = client.post(
             "/predict",
             files={"file": ("photo.jpg", valid_jpeg_bytes, "image/jpeg")},
         )
+    assert response.status_code == 200
     mock_download.assert_not_called()
