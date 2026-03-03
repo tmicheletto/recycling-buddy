@@ -47,18 +47,18 @@ The `model/` component is a training-only pipeline. Its output (a `.safetensors`
 
 Pydantic `BaseSettings` reads from `config/.env.<ENVIRONMENT>` (e.g. `config/.env.dev`). The `ENVIRONMENT` env var (default: `DEV`) selects the file. `.env.local` is gitignored and used for machine-local overrides.
 
-Key settings: `model_artifact_path`, `guidelines_data_path`, `s3_endpoint_url`, `openai_api_key`, `cors_origins`.
+Key settings: `model_artifact_path`, `tavily_api_key`, `search_cache_ttl_seconds`, `s3_endpoint_url`, `openai_api_key`, `cors_origins`.
 
 ### Guidelines advice flow (`api/app/guidelines.py`)
 
-1. Look up `label_to_rny.json` (`data/label_to_rny.json`) for the classifier label → RNY slug + URL
-2. Fetch the council's RNY page HTML as grounding context
+1. Search recyclingnearyou.com.au via Tavily for the classifier label + council slug
+2. Use the search results as grounding context
 3. Call GPT-4o-mini to extract structured `AdviceRecord`
 4. Cache result in memory with configurable TTL
 
 ### Labels
 
-`api/app/labels.py` is the single source of truth for the 67 waste category labels. Labels are lowercase with hyphens (e.g. `glass-bottles-jars`). The `data/label_to_rny.json` maps each label to its Recycling Near You slug and URL.
+`api/app/labels.py` is the single source of truth for the 67 waste category labels. Labels are lowercase with hyphens (e.g. `glass-bottles-jars`).
 
 ### Local development
 
