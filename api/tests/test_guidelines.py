@@ -218,7 +218,9 @@ async def test_search_cache_prevents_second_tavily_call() -> None:
     svc = GuidelinesService()
     svc._tavily = MagicMock()
     svc._tavily.search.return_value = {
-        "results": [{"url": "https://recyclingnearyou.com.au/test", "content": "test content"}]
+        "results": [
+            {"url": "https://recyclingnearyou.com.au/test", "content": "test content"}
+        ]
     }
     mock_record = _make_advice_record()
 
