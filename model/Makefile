@@ -1,6 +1,6 @@
 .PHONY: train evaluate promote test
 
-ARTIFACT ?= artifacts/efficientnet_b0_recycling_v1.safetensors
+ARTIFACT ?= artifacts/model.safetensors
 S3_BUCKET ?= recycling-buddy-data
 
 train:
