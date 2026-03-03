@@ -12,6 +12,7 @@ import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 
+from app.config import settings
 from app.inference import CategoryPrediction, ClassificationResult
 from app.main import app
 
@@ -178,3 +179,47 @@ def test_predict_loads_model_lazily_on_first_request(
         )
     assert response.status_code == 200
     assert app.state.model is mock_model
+
+
+def test_predict_downloads_artifact_when_path_is_s3_uri(
+    monkeypatch, mock_model: MagicMock, valid_jpeg_bytes: bytes
+) -> None:
+    """When MODEL_ARTIFACT_PATH is an s3:// URI, artifact is downloaded before load."""
+    monkeypatch.setattr(app.state, "model", None, raising=False)
+    monkeypatch.setattr(app.state, "model_lock", asyncio.Lock(), raising=False)
+    monkeypatch.setattr(
+        settings,
+        "model_artifact_path",
+        "s3://recycling-buddy-data/artifacts/efficientnet_b0_recycling_latest.safetensors",
+    )
+    with patch("app.main.s3_service.download_artifact") as mock_download, patch(
+        "app.main.ClassificationModel.from_artifact", return_value=mock_model
+    ):
+        client = TestClient(app)
+        response = client.post(
+            "/predict",
+            files={"file": ("photo.jpg", valid_jpeg_bytes, "image/jpeg")},
+        )
+    assert response.status_code == 200
+    mock_download.assert_called_once_with(
+        "artifacts/efficientnet_b0_recycling_latest.safetensors",
+        "/tmp/model.safetensors",
+    )
+
+
+def test_predict_does_not_download_when_path_is_local(
+    monkeypatch, mock_model: MagicMock, valid_jpeg_bytes: bytes
+) -> None:
+    """When MODEL_ARTIFACT_PATH is a local path, no S3 download is attempted."""
+    monkeypatch.setattr(app.state, "model", None, raising=False)
+    monkeypatch.setattr(app.state, "model_lock", asyncio.Lock(), raising=False)
+    monkeypatch.setattr(settings, "model_artifact_path", "/some/local/model.safetensors")
+    with patch("app.main.s3_service.download_artifact") as mock_download, patch(
+        "app.main.ClassificationModel.from_artifact", return_value=mock_model
+    ):
+        client = TestClient(app)
+        client.post(
+            "/predict",
+            files={"file": ("photo.jpg", valid_jpeg_bytes, "image/jpeg")},
+        )
+    mock_download.assert_not_called()

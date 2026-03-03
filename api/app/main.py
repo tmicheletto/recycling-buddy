@@ -62,6 +62,28 @@ s3_service = S3Service(
 )
 
 
+def _resolve_artifact_path(path: str) -> str:
+    """Return a local path to the model artifact.
+
+    If *path* is an ``s3://`` URI, downloads the artifact to
+    ``/tmp/model.safetensors`` and returns that path.  Otherwise returns
+    *path* unchanged.
+
+    Args:
+        path: ``MODEL_ARTIFACT_PATH`` setting value.
+
+    Returns:
+        Absolute local filesystem path to the artifact.
+    """
+    if not path.startswith("s3://"):
+        return path
+    without_scheme = path[len("s3://"):]
+    _bucket, _, key = without_scheme.partition("/")
+    local_path = "/tmp/model.safetensors"
+    s3_service.download_artifact(key, local_path)
+    return local_path
+
+
 # Response models
 class HealthResponse(BaseModel):
     """Health check response."""
@@ -156,9 +178,13 @@ async def predict(request: Request, file: UploadFile = File(...)) -> PredictionR
         async with request.app.state.model_lock:
             if request.app.state.model is None:
                 try:
+                    artifact_path = await run_in_threadpool(
+                        _resolve_artifact_path,
+                        settings.model_artifact_path,
+                    )
                     request.app.state.model = await run_in_threadpool(
                         ClassificationModel.from_artifact,
-                        settings.model_artifact_path,
+                        artifact_path,
                     )
                     logger.info("Model loaded lazily on first /predict request")
                 except Exception:
