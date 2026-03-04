@@ -19,9 +19,9 @@ def test_all_labels_frozenset_matches_list():
 
 def test_is_valid_label_accepts_known():
     """Test is_valid_label returns True for known labels."""
-    assert is_valid_label("metal-cans-tins")
-    assert is_valid_label("glass-bottles-jars")
-    assert is_valid_label("paper")
+    assert is_valid_label("steel-cans")
+    assert is_valid_label("glass-containers")
+    assert is_valid_label("paper-cardboard")
 
 
 def test_is_valid_label_rejects_unknown():
@@ -44,7 +44,7 @@ def test_is_s3_safe():
 
 def test_total_label_count():
     """Test the expected total number of labels."""
-    assert len(ALL_LABELS) == 67
+    assert len(ALL_LABELS) == 48
 
 
 def test_list_is_sorted():

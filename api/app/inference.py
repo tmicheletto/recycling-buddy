@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-_NUM_CLASSES: int = len(ALL_LABELS_LIST)  # 67
+_NUM_CLASSES: int = len(ALL_LABELS_LIST)  # 48
 _EFFICIENTNET_FEATURE_DIM: int = 1280
 
 # ImageNet normalisation — matches EfficientNet_B0_Weights.IMAGENET1K_V1
@@ -149,8 +149,8 @@ class ClassificationModel:
         tensor = self._decode(image_bytes)
 
         with torch.inference_mode():
-            logits = self._net(tensor)  # (1, 67)
-            probs = torch.softmax(logits, dim=1).squeeze(0)  # (67,)
+            logits = self._net(tensor)  # (1, 48)
+            probs = torch.softmax(logits, dim=1).squeeze(0)  # (48,)
 
         top3_indices = probs.argsort(descending=True)[:3].tolist()
 

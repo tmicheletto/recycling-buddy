@@ -28,7 +28,7 @@ MOCK_ADVICE = AdviceRecord(
     notes="",
     is_fallback=False,
     council_slug="SydneyNSW",
-    item_category="cardboard",
+    item_category="paper-cardboard",
 )
 
 MOCK_FALLBACK = AdviceRecord(
@@ -44,7 +44,7 @@ MOCK_FALLBACK = AdviceRecord(
     ),
     is_fallback=True,
     council_slug="SydneyNSW",
-    item_category="cardboard",
+    item_category="paper-cardboard",
 )
 
 MOCK_SPECIAL = AdviceRecord(
@@ -56,7 +56,7 @@ MOCK_SPECIAL = AdviceRecord(
     notes="Batteries must not go in kerbside bins — take to a battery drop-off point.",
     is_fallback=False,
     council_slug="SydneyNSW",
-    item_category="batteries-electronics",
+    item_category="batteries-single-use",
 )
 
 
@@ -69,11 +69,11 @@ def _make_mock_model() -> MagicMock:
     """Return a minimal mock ClassificationModel for app.state.model."""
     mock = MagicMock()
     mock.predict.return_value = ClassificationResult(
-        top_prediction=CategoryPrediction(label="cardboard", confidence=0.9),
+        top_prediction=CategoryPrediction(label="paper-cardboard", confidence=0.9),
         alternatives=[
-            CategoryPrediction(label="cardboard", confidence=0.9),
-            CategoryPrediction(label="paper", confidence=0.05),
-            CategoryPrediction(label="plastic-bags-soft-plastic", confidence=0.05),
+            CategoryPrediction(label="paper-cardboard", confidence=0.9),
+            CategoryPrediction(label="office-paper", confidence=0.05),
+            CategoryPrediction(label="soft-plastics", confidence=0.05),
         ],
     )
     return mock
@@ -128,7 +128,7 @@ def test_advice_returns_200_with_valid_params(
 ) -> None:
     """GET /advice with valid query params must return 200 with all required fields."""
     response = client_with_mock_guidelines.get(
-        "/advice?item_category=cardboard&council_slug=SydneyNSW"
+        "/advice?item_category=paper-cardboard&council_slug=SydneyNSW"
     )
     assert response.status_code == 200
 
@@ -170,7 +170,7 @@ def test_advice_missing_council_slug_returns_422(
     client_with_mock_guidelines: TestClient,
 ) -> None:
     """GET /advice without council_slug must return 422."""
-    response = client_with_mock_guidelines.get("/advice?item_category=cardboard")
+    response = client_with_mock_guidelines.get("/advice?item_category=paper-cardboard")
     assert response.status_code == 422
 
 
@@ -184,7 +184,7 @@ def test_advice_special_disposal_item_returns_correct_flag(
 ) -> None:
     """Items requiring special disposal must have correct flag and disposal_method in response."""
     response = client_with_special_disposal.get(
-        "/advice?item_category=batteries-electronics&council_slug=SydneyNSW"
+        "/advice?item_category=batteries-single-use&council_slug=SydneyNSW"
     )
     assert response.status_code == 200
 
@@ -201,7 +201,7 @@ def test_advice_special_disposal_item_returns_correct_flag(
 def test_advice_fallback_includes_disclaimer(client_with_fallback: TestClient) -> None:
     """Fallback response must have is_fallback=True and notes containing disclaimer."""
     response = client_with_fallback.get(
-        "/advice?item_category=cardboard&council_slug=SydneyNSW"
+        "/advice?item_category=paper-cardboard&council_slug=SydneyNSW"
     )
     assert response.status_code == 200
 
@@ -220,7 +220,7 @@ def test_advice_response_schema_matches_advice_record_fields(
 ) -> None:
     """All AdviceRecord field names must appear in the /advice response JSON."""
     response = client_with_mock_guidelines.get(
-        "/advice?item_category=cardboard&council_slug=SydneyNSW"
+        "/advice?item_category=paper-cardboard&council_slug=SydneyNSW"
     )
     assert response.status_code == 200
 

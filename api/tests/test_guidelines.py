@@ -26,7 +26,7 @@ def _make_advice_record(
     notes: str = "",
     is_fallback: bool = False,
     council_slug: str = "SydneyNSW",
-    item_category: str = "cardboard",
+    item_category: str = "paper-cardboard",
 ) -> AdviceRecord:
     """Return a fully-populated AdviceRecord for use in tests."""
     return AdviceRecord(
@@ -52,7 +52,7 @@ async def test_fallback_no_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("app.guidelines.settings", _settings_with_no_key())
     svc = GuidelinesService()
 
-    result = await svc.lookup("cardboard", "SydneyNSW")
+    result = await svc.lookup("paper-cardboard", "SydneyNSW")
 
     assert isinstance(result, AdviceRecord)
     assert result.is_fallback is True
@@ -77,8 +77,8 @@ async def test_advice_cache_prevents_second_llm_call() -> None:
         ) as mock_llm,
         patch.object(svc, "_search_rny", return_value=None),
     ):
-        await svc.lookup("cardboard", "SydneyNSW")
-        await svc.lookup("cardboard", "SydneyNSW")  # should hit cache
+        await svc.lookup("paper-cardboard", "SydneyNSW")
+        await svc.lookup("paper-cardboard", "SydneyNSW")  # should hit cache
         assert mock_llm.call_count == 1, (
             "LLM should only be called once (second call hits advice cache)"
         )
@@ -106,21 +106,21 @@ async def test_cache_key_is_item_and_council() -> None:
         ) as mock_llm,
         patch.object(svc, "_search_rny", return_value=None),
     ):
-        await svc.lookup("cardboard", "SydneyNSW")
-        await svc.lookup("cardboard", "MelbourneVIC")
+        await svc.lookup("paper-cardboard", "SydneyNSW")
+        await svc.lookup("paper-cardboard", "MelbourneVIC")
         assert mock_llm.call_count == 2, (
             "Different council = different cache key; LLM must be called twice"
         )
 
 
 # ---------------------------------------------------------------------------
-# Test 4: all 67 labels resolve without exception
+# Test 4: all 48 labels resolve without exception
 # ---------------------------------------------------------------------------
 
 
-async def test_all_67_labels_do_not_raise() -> None:
+async def test_all_48_labels_do_not_raise() -> None:
     """Every label in ALL_LABELS_LIST must resolve to an AdviceRecord without raising."""
-    assert len(ALL_LABELS_LIST) == 67, f"Expected 67 labels, got {len(ALL_LABELS_LIST)}"
+    assert len(ALL_LABELS_LIST) == 48, f"Expected 48 labels, got {len(ALL_LABELS_LIST)}"
     mock_record = _make_advice_record()
 
     for label in ALL_LABELS_LIST:
@@ -154,14 +154,14 @@ async def test_llm_response_parsed_correctly() -> None:
         notes="Place in green FOGO bin",
         is_fallback=False,
         council_slug="SydneyNSW",
-        item_category="cardboard",
+        item_category="paper-cardboard",
     )
 
     with (
         patch.object(svc, "_call_llm", new_callable=AsyncMock, return_value=expected),
         patch.object(svc, "_search_rny", return_value=None),
     ):
-        result = await svc.lookup("cardboard", "SydneyNSW")
+        result = await svc.lookup("paper-cardboard", "SydneyNSW")
 
     assert result.bin_colour == expected.bin_colour
     assert result.bin_name == expected.bin_name
@@ -184,7 +184,7 @@ async def test_fallback_record_fields_complete(monkeypatch: pytest.MonkeyPatch) 
     monkeypatch.setattr("app.guidelines.settings", _settings_with_no_key())
     svc = GuidelinesService()
 
-    result = await svc.lookup("cardboard", "SydneyNSW")
+    result = await svc.lookup("paper-cardboard", "SydneyNSW")
 
     for field_name in (
         "bin_colour",
@@ -227,10 +227,10 @@ async def test_search_cache_prevents_second_tavily_call() -> None:
     with patch.object(
         svc, "_call_llm", new_callable=AsyncMock, return_value=mock_record
     ):
-        await svc.lookup("cardboard", "SydneyNSW")
+        await svc.lookup("paper-cardboard", "SydneyNSW")
         # Clear advice cache to force search path
         svc._advice_cache.clear()
-        await svc.lookup("cardboard", "SydneyNSW")
+        await svc.lookup("paper-cardboard", "SydneyNSW")
 
     assert svc._tavily.search.call_count == 1, (
         "Tavily should only be called once (second call hits search cache)"
@@ -252,11 +252,11 @@ async def test_tavily_failure_falls_back_gracefully() -> None:
     with patch.object(
         svc, "_call_llm", new_callable=AsyncMock, return_value=mock_record
     ) as mock_llm:
-        result = await svc.lookup("cardboard", "SydneyNSW")
+        result = await svc.lookup("paper-cardboard", "SydneyNSW")
 
     assert isinstance(result, AdviceRecord)
     # LLM should be called with search_content=None
-    mock_llm.assert_called_once_with("cardboard", "SydneyNSW", None)
+    mock_llm.assert_called_once_with("paper-cardboard", "SydneyNSW", None)
 
 
 # ---------------------------------------------------------------------------
@@ -273,9 +273,9 @@ async def test_no_tavily_key_calls_llm_without_search() -> None:
     with patch.object(
         svc, "_call_llm", new_callable=AsyncMock, return_value=mock_record
     ) as mock_llm:
-        await svc.lookup("cardboard", "SydneyNSW")
+        await svc.lookup("paper-cardboard", "SydneyNSW")
 
-    mock_llm.assert_called_once_with("cardboard", "SydneyNSW", None)
+    mock_llm.assert_called_once_with("paper-cardboard", "SydneyNSW", None)
 
 
 # ---------------------------------------------------------------------------

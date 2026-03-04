@@ -1,6 +1,6 @@
 # Model Component
 
-EfficientNet-B0 image classifier for 67 household waste categories.
+EfficientNet-B0 image classifier for 48 household waste categories.
 
 ## Overview
 
@@ -89,12 +89,12 @@ Outputs a JSON report to stdout:
   "overall_top1_accuracy": 0.872,
   "overall_top3_accuracy": 0.961,
   "per_category": {
-    "cardboard": 0.91,
-    "plastic-bottles-containers": 0.85,
+    "paper-cardboard": 0.91,
+    "plastic-containers": 0.85,
     ...
   },
   "confused_pairs": [
-    ["glass-bottles-jars", "plastic-bottles-containers", 3],
+    ["glass-containers", "plastic-containers", 3],
     ...
   ]
 }
@@ -137,9 +137,9 @@ uv run pytest
 ## Model Architecture
 
 - **Backbone**: EfficientNet-B0 (ImageNet pretrained, `EfficientNet_B0_Weights.IMAGENET1K_V1`)
-- **Head**: `nn.Linear(1280, 67)` replacing the default classifier
+- **Head**: `nn.Linear(1280, 48)` replacing the default classifier
 - **Input**: 224×224 RGB, ImageNet normalisation
-- **Output**: 67-class softmax over waste item categories
+- **Output**: 48-class softmax over waste item categories
 - **Artifact format**: safetensors state dict (≤100 MB)
 
 ## Artifact Path

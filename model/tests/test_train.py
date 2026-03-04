@@ -35,16 +35,16 @@ def _make_tiny_dataset(root: Path, n_classes: int = 3, n_per_class: int = 2) -> 
 
 
 def test_build_model_returns_nn_module() -> None:
-    model = build_model(num_classes=67)
+    model = build_model(num_classes=48)
     assert isinstance(model, nn.Module)
 
 
 def test_build_model_classifier_head_shape() -> None:
-    model = build_model(num_classes=67)
+    model = build_model(num_classes=48)
     # EfficientNet-B0 classifier is Sequential; index 1 is the Linear layer
     head = cast(nn.Sequential, model.classifier)[1]
     assert isinstance(head, nn.Linear)
-    assert head.out_features == 67
+    assert head.out_features == 48
 
 
 def test_build_model_custom_num_classes() -> None:
@@ -59,7 +59,7 @@ def test_build_model_custom_num_classes() -> None:
 
 
 def test_freeze_backbone_freezes_all_but_classifier() -> None:
-    model = build_model(num_classes=67)
+    model = build_model(num_classes=48)
     freeze_backbone(model)
     for name, param in model.named_parameters():
         if "classifier" not in name:
@@ -67,7 +67,7 @@ def test_freeze_backbone_freezes_all_but_classifier() -> None:
 
 
 def test_freeze_backbone_keeps_classifier_trainable() -> None:
-    model = build_model(num_classes=67)
+    model = build_model(num_classes=48)
     freeze_backbone(model)
     for name, param in model.named_parameters():
         if "classifier" in name:
@@ -80,13 +80,13 @@ def test_freeze_backbone_keeps_classifier_trainable() -> None:
 
 
 def test_get_optimizer_returns_adamw() -> None:
-    model = build_model(num_classes=67)
+    model = build_model(num_classes=48)
     optimizer = get_optimizer(model, head_lr=1e-3, backbone_lr=1e-5)
     assert isinstance(optimizer, torch.optim.AdamW)
 
 
 def test_get_optimizer_backbone_lr_less_than_head_lr() -> None:
-    model = build_model(num_classes=67)
+    model = build_model(num_classes=48)
     optimizer = get_optimizer(model, head_lr=1e-3, backbone_lr=1e-5)
     lrs = [pg["lr"] for pg in optimizer.param_groups]
     assert min(lrs) < max(lrs), "backbone LR must be less than head LR"

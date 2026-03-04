@@ -134,13 +134,13 @@ def test_predict_raises_value_error_on_corrupt_bytes(
 
 
 def test_category_prediction_is_frozen() -> None:
-    pred = CategoryPrediction(label="cardboard", confidence=0.9)
+    pred = CategoryPrediction(label="paper-cardboard", confidence=0.9)
     with pytest.raises((AttributeError, TypeError)):
-        pred.label = "paper"  # type: ignore[misc]
+        pred.label = "office-paper"  # type: ignore[misc]
 
 
 def test_classification_result_is_frozen() -> None:
-    pred = CategoryPrediction(label="cardboard", confidence=0.9)
+    pred = CategoryPrediction(label="paper-cardboard", confidence=0.9)
     result = ClassificationResult(
         top_prediction=pred,
         alternatives=[pred, pred, pred],

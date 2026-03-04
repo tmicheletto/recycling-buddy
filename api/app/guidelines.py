@@ -258,7 +258,7 @@ class GuidelinesService:
         waste on any failure.
 
         Args:
-            item_category: Classifier label (e.g. 'cardboard', 'glass-bottles-jars').
+            item_category: Classifier label (e.g. 'paper-cardboard', 'glass-containers').
             council_slug: RNY council slug (e.g. 'SydneyNSW', 'MelbourneVIC').
 
         Returns:

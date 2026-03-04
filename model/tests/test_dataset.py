@@ -32,7 +32,7 @@ def _make_image_dir(root: Path, labels: list[str], images_per_label: int = 5) ->
 # ---------------------------------------------------------------------------
 
 
-LABELS = ["cardboard", "plastic-bottles-containers", "glass-bottles-jars"]
+LABELS = ["paper-cardboard", "plastic-containers", "glass-containers"]
 IMAGES_PER_LABEL = 10
 
 

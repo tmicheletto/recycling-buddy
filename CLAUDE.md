@@ -58,7 +58,7 @@ Key settings: `model_artifact_path`, `tavily_api_key`, `search_cache_ttl_seconds
 
 ### Labels
 
-`api/app/labels.py` is the single source of truth for the 67 waste category labels. Labels are lowercase with hyphens (e.g. `glass-bottles-jars`).
+`model/recbuddy/labels.py` is the single source of truth for the 48 waste category labels (from recyclingnearyou.com.au Home categories). Labels are lowercase with hyphens (e.g. `glass-containers`).
 
 ### Local development
 

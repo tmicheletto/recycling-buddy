@@ -21,17 +21,17 @@ def test_upload_valid_jpeg():
     encoded = base64.b64encode(image_data).decode()
 
     with patch("app.main.s3_service.upload_training_image") as mock_upload:
-        mock_upload.return_value = "metal-cans-tins/test-key.jpeg"
+        mock_upload.return_value = "steel-cans/test-key.jpeg"
 
         response = client.post(
             "/upload",
-            json={"image_base64": encoded, "label": "metal-cans-tins"},
+            json={"image_base64": encoded, "label": "steel-cans"},
         )
 
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
-        assert data["label"] == "metal-cans-tins"
+        assert data["label"] == "steel-cans"
         assert "test-key" in data["s3_key"]
         mock_upload.assert_called_once()
 
@@ -42,24 +42,24 @@ def test_upload_valid_png():
     encoded = base64.b64encode(image_data).decode()
 
     with patch("app.main.s3_service.upload_training_image") as mock_upload:
-        mock_upload.return_value = "glass-bottles-jars/test-key.png"
+        mock_upload.return_value = "glass-containers/test-key.png"
 
         response = client.post(
             "/upload",
-            json={"image_base64": encoded, "label": "glass-bottles-jars"},
+            json={"image_base64": encoded, "label": "glass-containers"},
         )
 
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
-        assert data["label"] == "glass-bottles-jars"
+        assert data["label"] == "glass-containers"
 
 
 def test_upload_invalid_base64():
     """Test upload with invalid base64 data."""
     response = client.post(
         "/upload",
-        json={"image_base64": "not-valid-base64!!!", "label": "metal-cans-tins"},
+        json={"image_base64": "not-valid-base64!!!", "label": "steel-cans"},
     )
 
     assert response.status_code == 400
@@ -73,7 +73,7 @@ def test_upload_invalid_image_format():
 
     response = client.post(
         "/upload",
-        json={"image_base64": encoded, "label": "metal-cans-tins"},
+        json={"image_base64": encoded, "label": "steel-cans"},
     )
 
     assert response.status_code == 400
@@ -116,7 +116,7 @@ def test_upload_s3_error():
 
         response = client.post(
             "/upload",
-            json={"image_base64": encoded, "label": "metal-cans-tins"},
+            json={"image_base64": encoded, "label": "steel-cans"},
         )
 
         assert response.status_code == 500

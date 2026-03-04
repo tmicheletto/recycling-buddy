@@ -22,7 +22,7 @@ def _make_training_metadata(tmp_path: Path) -> Path:
         "epochs": 30,
         "val_accuracy": 0.9142,
         "seed": 42,
-        "num_classes": 67,
+        "num_classes": 48,
         "timestamp": "20260303T120000Z",
     }
     meta_path = tmp_path / "training_run_20260303T120000Z.json"

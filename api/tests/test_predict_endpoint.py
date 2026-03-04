@@ -27,11 +27,11 @@ def mock_model() -> MagicMock:
     """A mock ClassificationModel that returns a fixed result."""
     mock = MagicMock()
     mock.predict.return_value = ClassificationResult(
-        top_prediction=CategoryPrediction(label="cardboard", confidence=0.923),
+        top_prediction=CategoryPrediction(label="paper-cardboard", confidence=0.923),
         alternatives=[
-            CategoryPrediction(label="cardboard", confidence=0.923),
-            CategoryPrediction(label="plastic-lined-cardboard", confidence=0.041),
-            CategoryPrediction(label="paper", confidence=0.018),
+            CategoryPrediction(label="paper-cardboard", confidence=0.923),
+            CategoryPrediction(label="cartons", confidence=0.041),
+            CategoryPrediction(label="office-paper", confidence=0.018),
         ],
     )
     return mock
@@ -77,7 +77,7 @@ def test_predict_response_contains_label(
     )
     body = response.json()
     assert "label" in body
-    assert body["label"] == "cardboard"
+    assert body["label"] == "paper-cardboard"
 
 
 def test_predict_response_confidence_in_unit_interval(
