@@ -67,7 +67,6 @@ build/
 *.log
 
 # Training data and artifacts
-data/
 model/data/
 model/artifacts/
 
